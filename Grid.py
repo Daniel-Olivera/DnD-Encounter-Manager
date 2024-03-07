@@ -31,11 +31,25 @@ class Grid:
     def setCellSize(self, newCellSize):
         self.cellSize = newCellSize
         
-    def addObjectToCell(self, x, y, obj):
+    def findCell(self, x, y):
         for cell in self.cells:
             if cell.getXCoord() == x and cell.getYCoord() == y:
-                cell.addObject(obj)
-                break
+                return cell
+        
+    def addObjectToCell(self, x, y, obj):
+        cell = self.findCell(x,y)
+        cell.addObject(obj)
+            
+    def removeObjectFromCell(self, x, y, obj):
+        cell = self.findCell(x,y)
+        cell.removeObject(obj)
+        
+    def moveObject(self, x1, y1, obj, x2, y2):
+        cell1 = self.findCell(x1,y1)
+        cell2 = self.findCell(x2,y2)
+        cell1.removeObject(obj)
+        cell2.addObject(obj)
+
                 
     def printCells(self):
         for cell in self.cells:

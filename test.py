@@ -7,5 +7,9 @@ def main():
     grid.addObjectToCell(0,1,1)
     grid.addObjectToCell(1,1,5)
     grid.printCells()
+    print("------------------------")
+    grid.moveObject(1,1,5,0,0)
+    grid.printCells()
+    
     
 main()

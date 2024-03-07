@@ -6,20 +6,20 @@ class Cell:
     size_x = 0
     size_y = 0
     
-    cellObjects = []
+    cellObjects = set()
         
     def __init__(self, x, y, size):
         self.x = x
         self.y = y
         self.size_x = size
         self.size_y = size
-        self.cellObjects = []
+        self.cellObjects = set()
     
     def addObject(self, newObject):
-        self.cellObjects.append(newObject)
+        self.cellObjects.add(newObject)
         
-    def removeObject(self, index):
-        self.cellObjects.pop(index)
+    def removeObject(self, obj):
+        self.cellObjects.remove(obj)
         
     def getXCoord(self):
         return self.x
