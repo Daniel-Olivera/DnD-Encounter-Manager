@@ -1,4 +1,4 @@
-from Object import Object
+from Objects import Object
 
 class Cell:
     x = 0
@@ -19,7 +19,7 @@ class Cell:
         self.cellObjects.add(newObject)
         
     def removeObject(self, obj):
-        self.cellObjects.remove(obj)
+        self.cellObjects.discard(obj)
         
     def getXCoord(self):
         return self.x

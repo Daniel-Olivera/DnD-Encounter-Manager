@@ -1,5 +1,7 @@
 from Cell import Cell
 
+# Manages the gameboard, allowing the user to add/remove items on cells
+# or move items from cell to cell.
 class Grid:
     size = 0
     cellSize = 0
@@ -49,7 +51,6 @@ class Grid:
         cell2 = self.findCell(x2,y2)
         cell1.removeObject(obj)
         cell2.addObject(obj)
-
                 
     def printCells(self):
         for cell in self.cells:
