@@ -1,23 +1,32 @@
 from Object import Object
 
 class Cell:
+    x = 0
+    y = 0
     size_x = 0
     size_y = 0
     
-    objects = []
-    
-    def __init__(self, size):
-        self.size_x = size
-        self.size_y = size
+    cellObjects = []
         
-    def __init__(self, size, objects):
+    def __init__(self, x, y, size):
+        self.x = x
+        self.y = y
         self.size_x = size
         self.size_y = size
-        self.objects = objects
+        self.cellObjects = []
     
     def addObject(self, newObject):
-        self.objects.append(newObject)
+        self.cellObjects.append(newObject)
         
     def removeObject(self, index):
-        self.objects.pop(index)
+        self.cellObjects.pop(index)
+        
+    def getXCoord(self):
+        return self.x
+    
+    def getYCoord(self):
+        return self.y
+    
+    def getItems(self):
+        return self.cellObjects
     

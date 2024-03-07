@@ -11,7 +11,9 @@ class Grid:
         self.size = size
         self.cellSize = cellSize
         self.numCells = pow(size,2)
-        self.cells = [Cell(cellSize, None)]*self.numCells
+        for i in range(0,size):
+            for j in range(0,size):
+                self.cells.append(Cell(i,j,cellSize))
     
     def getSize(self):
         return self.size
@@ -29,6 +31,12 @@ class Grid:
     def setCellSize(self, newCellSize):
         self.cellSize = newCellSize
         
+    def addObjectToCell(self, x, y, obj):
+        for cell in self.cells:
+            if cell.getXCoord() == x and cell.getYCoord() == y:
+                cell.addObject(obj)
+                break
+                
     def printCells(self):
         for cell in self.cells:
-            print(cell)
+            print("[",cell.getXCoord(),",", cell.getYCoord(),"]", "items: ", cell.getItems())
