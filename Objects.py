@@ -4,6 +4,9 @@
 class Object:
     objType = -1
     
+    x = 0
+    y = 0
+    
     # TYPE_ITEM = 0
     # TYPE_ENEMY = 1
     # TYPE_CHARACTER = 2
@@ -25,12 +28,19 @@ class Object:
     def getDescription(self):
         return self.description
     
+    def getPos(self):
+        return (self.x, self.y)
+    
+    def setPos(self, newX, newY):
+        self.x = newX
+        self.y = newY
+    
 
 # An item is a subclass of an object. Items can be owned by enemies or players.
 # Items may also be un-owned. These can range from magic items, to just swords or barrels
 class Item(Object):
     
-    owner = ""
+    owner = None
     
     def __init__(self, name, desc):
         self.objType = 0
@@ -42,6 +52,9 @@ class Item(Object):
     
     def setOwner(self, newOwner):
         self.owner = newOwner
+        
+    def __str__(self):
+        return "\tName: {0}\n\tDescription: {1}".format(self.getName(), self.getDescription())
 
 # Slightly vague as a Character can be expressed as a player or an enemy.
 # Will store info like how healthy they are and how many spell slots are remaining, etc.
@@ -53,31 +66,26 @@ class Character(Object):
     TYPE_CHARACTER = 2
     
     health = 0
-    spellSlots = 0
     items = []
     
-    def __init__(self, objType, name, desc, hp, slots, items):
+    def __init__(self, objType, name, desc, hp):
         self.objType = objType
         self.name = name
         self.description = desc
         self.health = hp
-        self.spellSlots = slots
-        self.items = items
+        self.items = []
         
     def getHP(self):
         return self.health
     
-    def getSpellSlots(self):
-        return self.spellSlots
-    
     def getItems(self):
         return self.items
     
-    def removeItem(self, index):
-        self.items.pop(index)
+    def removeItem(self, item):
+        self.items.remove(item)
         
     def giveItem(self, item):
         self.items.append(item)
         
     def __str__(self):
-        return "Name: {0}\nDescription: {1}\nHP: {2}\nSpell Slots: {3}\nItems: {4}".format(self.getName(), self.getDescription(), self.getHP(), self.getSpellSlots(), self.getItems())
+        return "Name: {0}\nDescription: {1}\nHP: {2}\nItems: ".format(self.getName(), self.getDescription(), self.getHP())

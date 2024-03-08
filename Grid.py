@@ -41,6 +41,7 @@ class Grid:
     def addObjectToCell(self, x, y, obj):
         cell = self.findCell(x,y)
         cell.addObject(obj)
+        obj.setPos(x,y)
             
     def removeObjectFromCell(self, x, y, obj):
         cell = self.findCell(x,y)
@@ -51,7 +52,10 @@ class Grid:
         cell2 = self.findCell(x2,y2)
         cell1.removeObject(obj)
         cell2.addObject(obj)
+        obj.setPos(x2,y2)
                 
     def printCells(self):
         for cell in self.cells:
-            print("[",cell.getXCoord(),",", cell.getYCoord(),"]", "items: ", cell.getItems())
+            print("[",cell.getXCoord(),",", cell.getYCoord(),"]", "items: ")
+            for object in cell.getItems():
+                print(object)
