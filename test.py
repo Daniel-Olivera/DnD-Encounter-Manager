@@ -4,13 +4,13 @@ def main():
     
     # gm.grid.printCells()
     
-    gm.addPlayer("jake", "bonehead", 100)
-    gm.addPlayer("John", "jobless", 100)
-    gm.addPlayer("EJ", "pokefile", 100)
+    gm.addPlayer("jake", "description", 100)
+    gm.addPlayer("John", "description", 100)
+    gm.addPlayer("EJ", "description", 100)
     
-    gm.addEnemy("Morph", "brick", 100)
+    gm.addEnemy("Morph", "description", 100)
     
-    gm.addItem("Sword of Healing", "Heals instead of doing damage")
+    gm.addItem("item1", "description")
     gm.giveItemToCharacter(gm.items[0], gm.players[0])
 
     # gm.listPlayers()

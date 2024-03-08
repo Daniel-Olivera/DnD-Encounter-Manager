@@ -1,4 +1,4 @@
-from Cell import Cell
+from Modules.Cell import Cell
 
 # Manages the gameboard, allowing the user to add/remove items on cells
 # or move items from cell to cell.
@@ -16,6 +16,9 @@ class Grid:
         for i in range(0,size):
             for j in range(0,size):
                 self.cells.append(Cell(i,j,cellSize))
+                
+    def getCells(self):
+        return self.cells
     
     def getSize(self):
         return self.size

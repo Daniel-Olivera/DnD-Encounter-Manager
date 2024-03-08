@@ -1,18 +1,16 @@
-from Objects import Object
+from Modules.Objects import Object
 
 class Cell:
     x = 0
     y = 0
-    size_x = 0
-    size_y = 0
+    size = 0
     
     cellObjects = set()
         
     def __init__(self, x, y, size):
         self.x = x
         self.y = y
-        self.size_x = size
-        self.size_y = size
+        self.size = size
         self.cellObjects = set()
     
     def addObject(self, newObject):
@@ -26,6 +24,9 @@ class Cell:
     
     def getYCoord(self):
         return self.y
+    
+    def getSize(self):
+        return self.size
     
     def getItems(self):
         return self.cellObjects
