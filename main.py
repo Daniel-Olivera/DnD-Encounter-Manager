@@ -1,4 +1,5 @@
 import pygame
+import pygame_gui
 from GameMaster import GameMaster
 
 BLACK = (0, 0, 0)
@@ -19,13 +20,15 @@ def main():
     SCREEN.fill(GREY)
 
     while running:
-        drawGrid(gm)
-        # drawCell(0,0,50,8)
-        
+        drawGrid(gm)        
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                cell = getClickedCell(gm, pos)
+                print(cell.getXCoord(), cell.getYCoord())
         
         pygame.display.update()
 
@@ -42,6 +45,11 @@ def drawGrid(gm):
         for j in range(gm.getNumCols()):
             cell = gridCells[i]
             drawCell(cell.getXCoord()+(j*cell.getSize()), cell.getYCoord()+(i*cell.getSize()), cell.getSize(), 8)
+            
+def getClickedCell(gm, pos):
+    cellSize = gm.getGridCellSize()
+    convertedPos = (int(pos[0] / cellSize), int(pos[1] / cellSize))
+    return gm.getCell(convertedPos)
             
             
 if __name__ == "__main__":

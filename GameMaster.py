@@ -16,6 +16,12 @@ class GameMaster:
     
     def __init__(self, gridSize, cellSize):
         self.grid = Grid(gridSize, cellSize)
+        
+    def getCell(self, pos):
+        return self.grid.findCell(pos[0], pos[1])
+        
+    def getGridCellSize(self):
+        return self.grid.getCellSize()
     
     def getNumRows(self):
         return self.grid.getSize()
