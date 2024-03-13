@@ -7,8 +7,8 @@ WHITE = (255, 255, 255)
 GREY = (150, 150, 150)
 LIGHT_GREY = (200, 200, 200)
 BLUE = (100,100,200)
-WINDOW_HEIGHT = 400
-WINDOW_WIDTH = 400
+WINDOW_HEIGHT = 720
+WINDOW_WIDTH = 1280
 
 def main():
     
@@ -28,6 +28,7 @@ def main():
     while running:
         SCREEN.fill(GREY)
         drawGrid(gm, time_of_last_click, (offsetx, offsety))
+        drawUI()
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -36,7 +37,6 @@ def main():
                 time_of_last_click = pygame.time.get_ticks()     
             if event.type == pygame.MOUSEBUTTONUP:
                 mousePos = pygame.mouse.get_pos()
-                print(mousePos, offsetx, offsety)
                 cell = getClickedCell(gm, mousePos, (offsetx, offsety))
                 cell.setColor(LIGHT_GREY)
 
@@ -49,6 +49,9 @@ def main():
             offsety += 0.25
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             offsetx += 0.25
+        if keys[pygame.K_SPACE]:
+            offsetx = 0
+            offsety = 0
 
         pygame.display.update()
 
@@ -82,6 +85,19 @@ def getClickedCell(gm, mousePos, offset):
     cellSize = gm.getGridCellSize()
     convertedPos = (int((mousePos[0] - offset[0]) / cellSize), int((mousePos[1] - offset[1]) / cellSize))
     return gm.getCell(convertedPos)
+
+def clickedInGrid(gm, mousePos, offset):
+    cellSize = gm.getGridCellSize()
+    
+    
+def drawUI():
+    # pygame.draw.rect(SCREEN, GREY, (0,0,950,500))
+    pygame.draw.rect(SCREEN, WHITE, (0,500,950,720))
+    pygame.draw.rect(SCREEN, WHITE, (950,0,1280,720))
+    pygame.draw.line(SCREEN,BLACK,(950,0),(950,720))
+    pygame.draw.line(SCREEN,BLACK,(0,500),(950,500))
+    
+    
             
             
 if __name__ == "__main__":
