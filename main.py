@@ -35,7 +35,8 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 time_of_last_click = pygame.time.get_ticks()     
             if event.type == pygame.MOUSEBUTTONUP:
-                mousePos = pygame.mouse.get_mousePos()
+                mousePos = pygame.mouse.get_pos()
+                print(mousePos, offsetx, offsety)
                 cell = getClickedCell(gm, mousePos, (offsetx, offsety))
                 cell.setColor(LIGHT_GREY)
 
@@ -79,7 +80,7 @@ def drawGrid(gm, timeLastClick, cameraOffset):
             
 def getClickedCell(gm, mousePos, offset):
     cellSize = gm.getGridCellSize()
-    convertedPos = (int((mousePos[0] / cellSize)+offset[0]), int((mousePos[1] / cellSize)+offset[1]))
+    convertedPos = (int((mousePos[0] - offset[0]) / cellSize), int((mousePos[1] - offset[1]) / cellSize))
     return gm.getCell(convertedPos)
             
             
