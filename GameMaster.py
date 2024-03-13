@@ -17,6 +17,9 @@ class GameMaster:
     def __init__(self, gridSize, cellSize):
         self.grid = Grid(gridSize, cellSize)
         
+    def getGrid(self):
+        return self.grid
+        
     def getCell(self, pos):
         return self.grid.findCell(pos[0], pos[1])
         
@@ -87,6 +90,10 @@ class GameMaster:
     
     def getItems(self):
         return self.items
+    
+    def getCellColor(self,x,y):
+        return self.grid.findCell(x,y).getColor()
+        
         
     def listPlayers(self):
         print("*---- PLAYERS ----*")

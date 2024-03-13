@@ -3,6 +3,10 @@ from Modules.Cell import Cell
 # Manages the gameboard, allowing the user to add/remove items on cells
 # or move items from cell to cell.
 class Grid:
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+    GREY = (150, 150, 150)
+    
     size = 0
     cellSize = 0
     numCells = 0
