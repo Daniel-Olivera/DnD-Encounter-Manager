@@ -20,15 +20,22 @@ def main():
     pygame.init()
     SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     CLOCK = pygame.time.Clock()
-    SCREEN.fill(GREY)
+    pygame.display.set_caption('DND Encounter Simulator')
     time_of_last_click = 0
     offsetx = 0
     offsety = 0
+    font = pygame.font.Font('freesansbold.ttf', 15)
+    displayText = False
 
     while running:
         SCREEN.fill(GREY)
         drawGrid(gm, time_of_last_click, (offsetx, offsety))
         drawUI()
+        if displayText:
+            text = font.render('test', True, BLACK, WHITE)
+            textRect = text.get_rect()
+            textRect.center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
+            SCREEN.blit(text, textRect)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -40,7 +47,11 @@ def main():
                 if clickedInGrid(mousePos):
                     cell = getClickedCell(gm, mousePos, (offsetx, offsety))
                     if cell is not None:
+                        # TODO add cell info to banner
                         cell.setColor(LIGHT_GREY)
+                        displayText = True
+
+                        
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_UP]:
@@ -92,7 +103,6 @@ def clickedInGrid(mousePos):
     
     
 def drawUI():
-    # pygame.draw.rect(SCREEN, GREY, (0,0,950,500))
     pygame.draw.rect(SCREEN, WHITE, (0,500,950,720))
     pygame.draw.rect(SCREEN, WHITE, (950,0,1280,720))
     pygame.draw.line(SCREEN,BLACK,(950,0),(950,720))
