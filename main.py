@@ -37,8 +37,10 @@ def main():
                 time_of_last_click = pygame.time.get_ticks()     
             if event.type == pygame.MOUSEBUTTONUP:
                 mousePos = pygame.mouse.get_pos()
-                cell = getClickedCell(gm, mousePos, (offsetx, offsety))
-                cell.setColor(LIGHT_GREY)
+                if clickedInGrid(mousePos):
+                    cell = getClickedCell(gm, mousePos, (offsetx, offsety))
+                    if cell is not None:
+                        cell.setColor(LIGHT_GREY)
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_UP]:
@@ -80,14 +82,13 @@ def drawGrid(gm, timeLastClick, cameraOffset):
                      cell.getSize(), 8, timeLastClick)
             index += 1
   
-# TODO only return cell if mousePos is within bounding box    
 def getClickedCell(gm, mousePos, offset):
     cellSize = gm.getGridCellSize()
     convertedPos = (int((mousePos[0] - offset[0]) / cellSize), int((mousePos[1] - offset[1]) / cellSize))
     return gm.getCell(convertedPos)
 
-def clickedInGrid(gm, mousePos, offset):
-    cellSize = gm.getGridCellSize()
+def clickedInGrid(mousePos):
+    return (mousePos[0] > 0) and (mousePos[1] > 0) and (mousePos[0] < 950) and (mousePos[1] < 500)
     
     
 def drawUI():
