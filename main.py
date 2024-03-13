@@ -35,23 +35,19 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 time_of_last_click = pygame.time.get_ticks()     
             if event.type == pygame.MOUSEBUTTONUP:
-                pos = pygame.mouse.get_pos()
-                cell = getClickedCell(gm, pos, (offsetx, offsety))
+                mousePos = pygame.mouse.get_mousePos()
+                cell = getClickedCell(gm, mousePos, (offsetx, offsety))
                 cell.setColor(LIGHT_GREY)
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_w]:
+        if keys[pygame.K_w] or keys[pygame.K_UP]:
             offsety -= 0.25
-            print("w")
-        if keys[pygame.K_a]:
+        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
             offsetx -= 0.25
-            print("a")
-        if keys[pygame.K_s]:
+        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             offsety += 0.25
-            print("s")
-        if keys[pygame.K_d]:
+        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
             offsetx += 0.25
-            print("d")
 
         pygame.display.update()
 
@@ -81,9 +77,9 @@ def drawGrid(gm, timeLastClick, cameraOffset):
             index += 1
   
             
-def getClickedCell(gm, pos, offset):
+def getClickedCell(gm, mousePos, offset):
     cellSize = gm.getGridCellSize()
-    convertedPos = (int((pos[0] / cellSize)+offset[0]), int((pos[1] / cellSize)+offset[1]))
+    convertedPos = (int((mousePos[0] / cellSize)+offset[0]), int((mousePos[1] / cellSize)+offset[1]))
     return gm.getCell(convertedPos)
             
             
