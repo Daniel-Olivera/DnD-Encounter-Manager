@@ -97,7 +97,7 @@ def drawCell(gm, cell, x,y,size, timeLastClick):
     if cell.hasObjects():
         for obj in cell.getItems():
             if obj in gm.getPlayers():
-                pygame.draw.circle(SCREEN, BLUE, (x+(size/1.8),y+(size/1.8)),18,0,1,1,1,1)
+                pygame.draw.circle(SCREEN, BLUE, (x+(size/2),y+(size/2)),size/2.5,0,1,1,1,1)
 
 def drawGrid(gm, timeLastClick, cameraOffset):
     gridCells = gm.getGridCells()
