@@ -22,9 +22,12 @@ def main():
     CLOCK = pygame.time.Clock()
     SCREEN.fill(GREY)
     time_of_last_click = 0
+    offsetx = 0
+    offsety = 0
 
     while running:
-        drawGrid(gm, time_of_last_click)
+        SCREEN.fill(GREY)
+        drawGrid(gm, time_of_last_click, (offsetx, offsety))
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -33,9 +36,23 @@ def main():
                 time_of_last_click = pygame.time.get_ticks()     
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
-                cell = getClickedCell(gm, pos)
+                cell = getClickedCell(gm, pos, (offsetx, offsety))
                 cell.setColor(LIGHT_GREY)
-        
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_w]:
+            offsety -= 0.25
+            print("w")
+        if keys[pygame.K_a]:
+            offsetx -= 0.25
+            print("a")
+        if keys[pygame.K_s]:
+            offsety += 0.25
+            print("s")
+        if keys[pygame.K_d]:
+            offsetx += 0.25
+            print("d")
+
         pygame.display.update()
 
     pygame.quit()
@@ -53,19 +70,20 @@ def drawCell(gm, cell, x,y,size,borderSize, timeLastClick):
             if obj in gm.getPlayers():
                 pygame.draw.circle(SCREEN, BLUE, (x+(size/1.8),y+(size/1.8)),18,0,1,1,1,1)
 
-def drawGrid(gm, timeLastClick):
+def drawGrid(gm, timeLastClick, cameraOffset):
     gridCells = gm.getGridCells()
     index = 0
     for i in range(gm.getNumRows()):
         for j in range(gm.getNumCols()):
             cell = gridCells[index]
-            drawCell(gm, cell, cell.getXCoord()+(i*cell.getSize()), cell.getYCoord()+(j*cell.getSize()), cell.getSize(), 8, timeLastClick)
+            drawCell(gm, cell, cell.getXCoord()+(i*cell.getSize())+cameraOffset[0], cell.getYCoord()+(j*cell.getSize())+cameraOffset[1],
+                     cell.getSize(), 8, timeLastClick)
             index += 1
   
             
-def getClickedCell(gm, pos):
+def getClickedCell(gm, pos, offset):
     cellSize = gm.getGridCellSize()
-    convertedPos = (int(pos[0] / cellSize), int(pos[1] / cellSize))
+    convertedPos = (int((pos[0] / cellSize)+offset[0]), int((pos[1] / cellSize)+offset[1]))
     return gm.getCell(convertedPos)
             
             
