@@ -77,7 +77,7 @@ def drawGrid(gm, timeLastClick, cameraOffset):
                      cell.getSize(), 8, timeLastClick)
             index += 1
   
-            
+# TODO only return cell if mousePos is within bounding box    
 def getClickedCell(gm, mousePos, offset):
     cellSize = gm.getGridCellSize()
     convertedPos = (int((mousePos[0] - offset[0]) / cellSize), int((mousePos[1] - offset[1]) / cellSize))
