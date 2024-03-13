@@ -19,6 +19,9 @@ class GameMaster:
         
     def getGrid(self):
         return self.grid
+    
+    def getGridSize(self):
+        return self.grid.getSize()
         
     def getCell(self, pos):
         return self.grid.findCell(pos[0], pos[1])

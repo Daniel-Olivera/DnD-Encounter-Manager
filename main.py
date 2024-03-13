@@ -1,5 +1,5 @@
 import pygame
-import pygame_gui
+# import pygame_gui
 from GameMaster import GameMaster
 
 BLACK = (0, 0, 0)
@@ -9,10 +9,11 @@ LIGHT_GREY = (200, 200, 200)
 BLUE = (100,100,200)
 WINDOW_HEIGHT = 720
 WINDOW_WIDTH = 1280
+BORDERSIZE = 2
 
 def main():
     
-    gm = GameMaster(4, 50)
+    gm = GameMaster(50, 50)
     gm.addPlayer("bob", "mage", 100)
     gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
     running = True
@@ -26,6 +27,7 @@ def main():
     offsety = 0
     font = pygame.font.Font('freesansbold.ttf', 15)
     displayText = False
+    dragging = False
 
     while running:
         SCREEN.fill(GREY)
@@ -41,27 +43,41 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
-                time_of_last_click = pygame.time.get_ticks()     
+                if event.button == 1:
+                    time_of_last_click = pygame.time.get_ticks()
+                if event.button == 2:
+                    mouse_x, mouse_y = event.pos  
+                    drag_start_pos_x = offsetx - mouse_x
+                    drag_start_pos_y = offsety - mouse_y
+                    dragging = True
             if event.type == pygame.MOUSEBUTTONUP:
-                mousePos = pygame.mouse.get_pos()
-                if clickedInGrid(mousePos):
-                    cell = getClickedCell(gm, mousePos, (offsetx, offsety))
-                    if cell is not None:
-                        # TODO add cell info to banner
-                        cell.setColor(LIGHT_GREY)
-                        displayText = True
-
-                        
+                if event.button == 2:
+                    dragging = False
+                if event.button == 1:
+                    mousePos = pygame.mouse.get_pos()
+                    if clickedInGrid(mousePos):
+                        cell = getClickedCell(gm, mousePos, (offsetx, offsety))
+                        if cell is not None:
+                            # TODO add cell info to banner
+                            cell.setColor(LIGHT_GREY)
+                            displayText = True
+            if event.type == pygame.MOUSEMOTION:
+                print(event.pos)
+                if dragging:
+                    mouse_x, mouse_y = event.pos
+                    offsetx = mouse_x + drag_start_pos_x
+                    offsety = mouse_y + drag_start_pos_y
+    
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            offsety -= 0.25
+            offsety -= 0.15 * gm.getGridSize()
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            offsetx -= 0.25
+            offsetx -= 0.15 * gm.getGridSize()
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            offsety += 0.25
+            offsety += 0.15 * gm.getGridSize()
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            offsetx += 0.25
+            offsetx += 0.15 * gm.getGridSize()
         if keys[pygame.K_SPACE]:
             offsetx = 0
             offsety = 0
@@ -71,13 +87,13 @@ def main():
     pygame.quit()
     
     
-def drawCell(gm, cell, x,y,size,borderSize, timeLastClick):
+def drawCell(gm, cell, x,y,size, timeLastClick):
     # print(pygame.time.get_ticks() - time_of_last_click)
     if (pygame.time.get_ticks() - timeLastClick) >= 350:
         cell.setColor(WHITE)
         
-    pygame.draw.rect(SCREEN, BLACK, (x, y, size+borderSize, size+borderSize))
-    pygame.draw.rect(SCREEN, cell.getColor(), (x+borderSize/2, y+borderSize/2, size, size))    
+    # pygame.draw.rect(SCREEN, BLACK, (x, y, size+BORDERSIZE, size+BORDERSIZE))
+    pygame.draw.rect(SCREEN, cell.getColor(), (x, y, size-BORDERSIZE, size-BORDERSIZE))    
     if cell.hasObjects():
         for obj in cell.getItems():
             if obj in gm.getPlayers():
@@ -90,12 +106,15 @@ def drawGrid(gm, timeLastClick, cameraOffset):
         for j in range(gm.getNumCols()):
             cell = gridCells[index]
             drawCell(gm, cell, cell.getXCoord()+(i*cell.getSize())+cameraOffset[0], cell.getYCoord()+(j*cell.getSize())+cameraOffset[1],
-                     cell.getSize(), 8, timeLastClick)
+                     cell.getSize(), timeLastClick)
             index += 1
   
 def getClickedCell(gm, mousePos, offset):
     cellSize = gm.getGridCellSize()
-    convertedPos = (int((mousePos[0] - offset[0]) / cellSize), int((mousePos[1] - offset[1]) / cellSize))
+    gridposx, gridposy = mousePos
+    gridposx -= offset[0]
+    gridposy -= offset[1]
+    convertedPos = (int((gridposx - (gridposx/cellSize)) / cellSize), int((gridposy - (gridposy/cellSize)) / cellSize))
     return gm.getCell(convertedPos)
 
 def clickedInGrid(mousePos):
