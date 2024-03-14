@@ -3,25 +3,26 @@ from GameMaster import GameMaster
 
 class UI:
     
+    BLACK = (10, 10, 10)
+    WHITE = (255, 255, 255)
+    DARK_BLUE = (75, 75, 255)
+    GREY = (150, 150, 150)
+    LIGHT_GREY = (200, 200, 200)
+    DARK_GREY = (50, 50, 50)
+    DARKER_GREY = (25,25,30)
+    BLUE = (100,100,200)
+    RED = (255,100,100)
+    DARK_RED = (255,50,50)
+    WINDOW_HEIGHT = 720
+    WINDOW_WIDTH = 1280
+    BORDERSIZE = 2
+    
     def __init__(self, SCREEN, gm, time_of_last_click, offsetx, offsety):
         self.SCREEN = SCREEN
         self.gm = gm
         self.time_of_last_click = time_of_last_click
         self.offsetx = offsetx
         self.offsety = offsety
-        self.BLACK = (10, 10, 10)
-        self.WHITE = (255, 255, 255)
-        self.DARK_BLUE = (75, 75, 255)
-        self.GREY = (150, 150, 150)
-        self.LIGHT_GREY = (200, 200, 200)
-        self.DARK_GREY = (50, 50, 50)
-        self.DARKER_GREY = (25,25,30)
-        self.BLUE = (100,100,200)
-        self.RED = (255,100,100)
-        self.DARK_RED = (255,50,50)
-        self.WINDOW_HEIGHT = 720
-        self.WINDOW_WIDTH = 1280
-        self.BORDERSIZE = 2
         self.scale = 0
         self.offsetx = 0
         self.offsety = 0
@@ -30,6 +31,10 @@ class UI:
         self.font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
         self.infoFont = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/3))
         self.colorBoxCoords = [((1090,50),(30,30)), ((1125,50),(30,30)), ((1160,50),(30,30)), ((1195,50),(30,30))]
+        self.elements = [Button(self.SCREEN, None,1090,50,30,30,Button.BUTTON_TYPE_RECT,self.DARKER_GREY),
+                         Button(self.SCREEN, None,1125,50,30,30,Button.BUTTON_TYPE_RECT,self.BLACK),
+                         Button(self.SCREEN, None,1160,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_RED),
+                         Button(self.SCREEN, None,1195,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_BLUE)]
         
         
     def drawCell(self, gm, cell, x,y,size, timeLastClick):
@@ -101,37 +106,57 @@ class UI:
         if cell is None:
             return
         cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  "
-        pygame.draw.rect(self.SCREEN, self.DARK_BLUE, (1090,50,30,30),2)
-        pygame.draw.rect(self.SCREEN, self.BLACK, (1125,50,30,30))
-        pygame.draw.rect(self.SCREEN, self.DARK_RED, (1160,50,30,30))
-        pygame.draw.rect(self.SCREEN, self.DARK_BLUE, (1195,50,30,30))
+        for element in self.elements:
+            element.draw()
+
         cellPosText = self.infoFont.render(cellPos, True, self.WHITE, None)
         textRect = cellPosText.get_rect()
         textRect.center = (((self.WINDOW_WIDTH - 950)/2)+900, 50)
         self.SCREEN.blit(cellPosText, textRect)
         
-    def getClickedColor(self, mousePos):
-        mousePosX, mousePosY = mousePos
-        index = 0
-        for colorBox in self.colorBoxCoords:
-            box_top_left_x, box_top_left_y = colorBox[0] 
-            box_bot_right_x, box_bot_right_y = colorBox[1]
-            if (mousePosX > box_top_left_x) and (mousePosY > box_top_left_y) and (mousePosX < box_top_left_x+box_bot_right_x) and (mousePosY < box_top_left_y+box_bot_right_y):
-                break
-            index += 1
+    def getClickedColor(self, mousePos):        
+        for button in self.elements:
+            if button.isClicked(mousePos):
+                return button.color
     
-        if index == 0:
-            return self.DARKER_GREY
-        elif index == 1:
-            return self.BLACK
-        elif index == 2:
-            return self.DARK_RED
-        elif index == 3:
-            return self.DARK_BLUE
-        else:
-            return None
+        return None
         
     def changeCellColor(self, newColor, cell):
         if newColor is None:
             return
+        if cell is None:
+            return
         self.gm.setCellColor(cell, newColor)
+        
+class UIElement:
+    
+    def __init__(self, SCREEN, text, x1, y1, x2, y2):
+        self.SCREEN = SCREEN
+        self.text = text
+        self.boundingBox = (x1, y1, x2, y2)
+        
+    def isClicked(self, mousePos):
+        mousePosX, mousePosY = mousePos
+        x1, y1, x2, y2 = self.boundingBox
+        return (mousePosX > x1) and (mousePosY > y1) and (mousePosX < x1+x2) and (mousePosY < y1+y2)
+    
+class Button(UIElement):
+    
+    BUTTON_TYPE_RECT = 0
+    BUTTON_TYPE_DROPDOWN = 1
+    
+    def __init__(self, SCREEN, text, x1, y1, x2, y2, type, color):
+        super().__init__(SCREEN, text, x1, y1, x2, y2)
+        self.type = type
+        self.color = color
+        
+    def draw(self):
+        self.drawButton()        
+        
+    def drawButton(self):
+        x1,y1,x2,y2 = self.boundingBox
+        if self.type == self.BUTTON_TYPE_RECT:
+            if self.color == UI.DARKER_GREY:
+                pygame.draw.rect(self.SCREEN, UI.DARK_BLUE, (x1,y1,x2,y2),2)
+            else:
+                pygame.draw.rect(self.SCREEN, self.color, (x1,y1,x2,y2))

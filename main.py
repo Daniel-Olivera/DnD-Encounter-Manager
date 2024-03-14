@@ -26,6 +26,7 @@ def main():
     dragging = False
     scale = 0
     ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)
+    selectedCell = None
 
 # MAIN LOOP
     while running:
@@ -49,14 +50,14 @@ def main():
                 if event.button == 1:
                     mousePos = pygame.mouse.get_pos()
                     if ui.clickedInGrid(mousePos):
-                        cell = ui.getClickedCell(gm, mousePos, (offsetx, offsety))
-                        if cell is not None:
+                        selectedCell = ui.getClickedCell(gm, mousePos, (offsetx, offsety))
+                        if selectedCell is not None:
                             # TODO add cell info to banner
-                            cell.setColor(ui.DARK_GREY)
-                            ui.displayText(cell)
+                            selectedCell.setColor(ui.DARK_GREY)
+                            ui.displayText(selectedCell)
                     else:
                         newColor = ui.getClickedColor(mousePos)
-                        ui.changeCellColor(newColor, cell)
+                        ui.changeCellColor(newColor, selectedCell)
             if event.type == pygame.MOUSEMOTION:
                 if dragging:
                     mouse_x, mouse_y = event.pos
