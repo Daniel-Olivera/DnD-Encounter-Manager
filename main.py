@@ -13,7 +13,7 @@ BORDERSIZE = 2
 
 def main():
     
-    gm = GameMaster(50, 50)
+    gm = GameMaster(4, 50)
     gm.addPlayer("bob", "mage", 100)
     gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
     running = True
@@ -127,8 +127,6 @@ def drawUI():
     pygame.draw.line(SCREEN,BLACK,(950,0),(950,720))
     pygame.draw.line(SCREEN,BLACK,(0,500),(950,500))
     
-    
-            
             
 if __name__ == "__main__":
     main()
