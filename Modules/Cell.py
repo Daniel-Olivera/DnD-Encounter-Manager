@@ -13,9 +13,9 @@ class Cell:
         self.x = x
         self.y = y
         self.size = size
-        self.color_r = 255
-        self.color_g = 255
-        self.color_b = 255
+        self.color_r = 25
+        self.color_g = 25
+        self.color_b = 50
         self.cellObjects = set()
     
     def addObject(self, newObject):

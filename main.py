@@ -2,20 +2,26 @@ import pygame
 # import pygame_gui
 from GameMaster import GameMaster
 
-BLACK = (0, 0, 0)
+BLACK = (10, 10, 10)
 WHITE = (255, 255, 255)
+DARK_BLUE = (75, 75, 255)
 GREY = (150, 150, 150)
 LIGHT_GREY = (200, 200, 200)
+DARK_GREY = (50, 50, 50)
+DARKER_GREY = (25,25,30)
 BLUE = (100,100,200)
+RED = (255,100,100)
 WINDOW_HEIGHT = 720
 WINDOW_WIDTH = 1280
 BORDERSIZE = 2
 
 def main():
     
-    gm = GameMaster(4, 50)
-    gm.addPlayer("bob", "mage", 100)
+    gm = GameMaster(50, 50)
+    gm.addPlayer("Ghoulbro", "mage", 100)
+    gm.addEnemy("Goblin", "archer", 100)
     gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
+    gm.placeCharacterOnBoard(gm.getEnemies()[0], 2,3)
     running = True
     global SCREEN, CLOCK
     pygame.init()
@@ -25,17 +31,19 @@ def main():
     time_of_last_click = 0
     offsetx = 0
     offsety = 0
-    font = pygame.font.Font('freesansbold.ttf', 15)
+    global font
     displayText = False
     dragging = False
     scale = 0
 
     while running:
-        SCREEN.fill(GREY)
+        font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
+        SCREEN.fill(BLACK)
         drawGrid(gm, time_of_last_click, (offsetx, offsety))
         drawUI()
+        
         if displayText:
-            text = font.render('test', True, BLACK, WHITE)
+            text = font.render('test', True, WHITE, None)
             textRect = text.get_rect()
             textRect.center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
             SCREEN.blit(text, textRect)
@@ -60,7 +68,7 @@ def main():
                         cell = getClickedCell(gm, mousePos, (offsetx, offsety))
                         if cell is not None:
                             # TODO add cell info to banner
-                            cell.setColor(LIGHT_GREY)
+                            cell.setColor(DARK_GREY)
                             displayText = True
             if event.type == pygame.MOUSEMOTION:
                 if dragging:
@@ -94,16 +102,25 @@ def main():
     
     
 def drawCell(gm, cell, x,y,size, timeLastClick):
-    # print(pygame.time.get_ticks() - time_of_last_click)
     if (pygame.time.get_ticks() - timeLastClick) >= 350:
-        cell.setColor(WHITE)
+        cell.setColor(DARKER_GREY)
         
-    # pygame.draw.rect(SCREEN, BLACK, (x, y, size+BORDERSIZE, size+BORDERSIZE))
     pygame.draw.rect(SCREEN, cell.getColor(), (x, y, size-BORDERSIZE, size-BORDERSIZE))    
     if cell.hasObjects():
         for obj in cell.getItems():
             if obj in gm.getPlayers():
                 pygame.draw.circle(SCREEN, BLUE, (x+(size/2),y+(size/2)),size/2.5,0,1,1,1,1)
+                text = font.render(obj.getName(), True, WHITE, None)
+                textRect = text.get_rect()
+                textRect.center = (x+(size/2),y+(size/4))
+                SCREEN.blit(text, textRect)
+            if obj in gm.getEnemies():
+                pygame.draw.circle(SCREEN, RED, (x+(size/2),y+(size/2)),size/2.5,0,1,1,1,1)
+                text = font.render(obj.getName(), True, WHITE, None)
+                textRect = text.get_rect()
+                textRect.center = (x+(size/2),y+(size/2))
+                SCREEN.blit(text, textRect)
+                
 
 def drawGrid(gm, timeLastClick, cameraOffset):
     gridCells = gm.getGridCells()
@@ -128,10 +145,13 @@ def clickedInGrid(mousePos):
     
     
 def drawUI():
-    pygame.draw.rect(SCREEN, WHITE, (0,500,950,720))
-    pygame.draw.rect(SCREEN, WHITE, (950,0,1280,720))
-    pygame.draw.line(SCREEN,BLACK,(950,0),(950,720))
-    pygame.draw.line(SCREEN,BLACK,(0,500),(950,500))
+    pygame.draw.rect(SCREEN, DARKER_GREY, (0,500,950,720))
+    pygame.draw.rect(SCREEN, DARKER_GREY, (950,0,1280,720))
+    pygame.draw.line(SCREEN,BLACK,(950,500),(950,720))
+    pygame.draw.line(SCREEN,DARK_BLUE,(950,0),(950,500))
+    pygame.draw.line(SCREEN,DARK_BLUE,(0,500),(950,500))
+    pygame.draw.line(SCREEN,DARK_BLUE,(0,1),(950,1))
+    pygame.draw.line(SCREEN,DARK_BLUE,(0,0),(0,500))
     
             
 if __name__ == "__main__":
