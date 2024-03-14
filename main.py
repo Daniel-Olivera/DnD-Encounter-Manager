@@ -22,7 +22,9 @@ def main():
     offsetx = 0
     offsety = 0
     global font
-    dragging = False
+    middleMouseDragging = False
+    mouseOneDragging = False
+
     scale = 0
     ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)
     selectedCell = None
@@ -38,36 +40,34 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     time_of_last_click = pygame.time.get_ticks()
+                    selectedCell = ui.getClickedCell(gm, mousePos, (offsetx, offsety))
+                    mouseOneDragging = True
                 if event.button == 2:
                     mouse_x, mouse_y = event.pos  
                     drag_start_pos_x = offsetx - mouse_x
                     drag_start_pos_y = offsety - mouse_y
-                    dragging = True
+                    middleMouseDragging = True
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 2:
-                    dragging = False
+                    middleMouseDragging = False
                 if event.button == 1:
+                    mouseOneDragging = False
                     mousePos = pygame.mouse.get_pos()
                     if ui.clickedInGrid(mousePos):
                         selectedCell = ui.getClickedCell(gm, mousePos, (offsetx, offsety))
                         if selectedCell is not None:
-                            # TODO add cell info to banner
                             selectedCell.setColor(ui.DARK_GREY)
                             ui.displayText(selectedCell)
                     else:
                         newColor = ui.getClickedColor(mousePos)
                         ui.changeCellColor(newColor, selectedCell)
             if event.type == pygame.MOUSEMOTION:
-                if dragging:
-                    mouse_x, mouse_y = event.pos
-                    offsetx = mouse_x + drag_start_pos_x
-                    offsety = mouse_y + drag_start_pos_y
+                if middleMouseDragging:
+                    offsetx, offsety = ui.dragGrid(event.pos, drag_start_pos_x, drag_start_pos_y)
+                if mouseOneDragging:
+                    ui.holdCharacter(event.pos, selectedCell)
             if event.type == pygame.MOUSEWHEEL:
-                if event.y == 1:
-                    scale = 3
-                if event.y == -1:
-                    scale = (-3)
-                gm.setGridCellSize(gm.getGridCellSize() + scale)
+                ui.changeZoom(event)
     
 
         keys = pygame.key.get_pressed()

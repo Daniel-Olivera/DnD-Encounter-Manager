@@ -142,6 +142,26 @@ class UI:
         if cell is None:
             return
         self.gm.setCellColor(cell, newColor)
+        
+    def changeZoom(self, event):
+        if event.y == 1:
+            scale = 3
+        if event.y == -1:
+            scale = (-3)
+        self.gm.setGridCellSize(self.gm.getGridCellSize() + scale)
+        
+    def dragGrid(self, mousePos, drag_start_pos_x, drag_start_pos_y):
+        mouse_x, mouse_y = mousePos
+        offsetx = mouse_x + drag_start_pos_x
+        offsety = mouse_y + drag_start_pos_y
+        return (offsetx, offsety)
+    
+    def holdCharacter(self, mousePos, cell):
+        if cell.hasObjects() == False:
+            return
+        
+        
+    
 
 # Building block for any ui element
 # Any element should be a subclass of this one
