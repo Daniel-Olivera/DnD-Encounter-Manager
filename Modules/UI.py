@@ -128,6 +128,10 @@ class UI:
             return self.DARK_RED
         elif index == 3:
             return self.DARK_BLUE
+        else:
+            return None
         
     def changeCellColor(self, newColor, cell):
+        if newColor is None:
+            return
         self.gm.setCellColor(cell, newColor)
