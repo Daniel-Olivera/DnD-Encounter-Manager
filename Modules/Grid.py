@@ -3,20 +3,12 @@ from Modules.Cell import Cell
 # Manages the gameboard, allowing the user to add/remove items on cells
 # or move items from cell to cell.
 class Grid:
-    BLACK = (0, 0, 0)
-    WHITE = (255, 255, 255)
-    GREY = (150, 150, 150)
-    
-    size = 0
-    cellSize = 0
-    numCells = 0
-    
-    cells = []
     
     def __init__(self, size, cellSize):
         self.size = size
         self.cellSize = cellSize
         self.numCells = pow(size,2)
+        self.cells = []
         for i in range(0,size):
             for j in range(0,size):
                 self.cells.append(Cell(i,j,cellSize))

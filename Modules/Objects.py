@@ -2,19 +2,14 @@
 # if it is an item, a character or an enemy. Objects can populate Cells on the grid.
 # There can be multiple objects on a grid cell.  
 class Object:
-    objType = -1
-    
-    x = 0
-    y = 0
-    
+
     # TYPE_ITEM = 0
     # TYPE_ENEMY = 1
     # TYPE_CHARACTER = 2
     
-    name = ""
-    description = ""
-    
     def __init__(self, objType, name, desc):
+        self.x = 0
+        self.y = 0
         self.name = name
         self.objType = objType
         self.description = desc

@@ -1,13 +1,6 @@
 from Modules.Objects import Object
 
 class Cell:
-    x = 0
-    y = 0
-    size = 0
-    color_r = 0
-    color_g = 0
-    color_b = 0
-    cellObjects = set()
         
     def __init__(self, x, y, size):
         self.x = x

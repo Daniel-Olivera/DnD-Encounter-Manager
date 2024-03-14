@@ -5,17 +5,14 @@ from Modules.Objects import Character
 # Manages the Game. Used to manipulate the gameboard and move characters and items around
 class GameMaster:
     
-    numPlayers = 0
-    numEnemies = 0
-    numItems = 0
-    
-    grid = Grid(0,0)
-    players = []
-    enemies = []
-    items = []
-    
     def __init__(self, gridSize, cellSize):
+        self.numPlayers = 0
+        self.numEnemies = 0
+        self.numItems = 0
         self.grid = Grid(gridSize, cellSize)
+        self.players = []
+        self.enemies = []
+        self.items = []
         
     def getGrid(self):
         return self.grid
