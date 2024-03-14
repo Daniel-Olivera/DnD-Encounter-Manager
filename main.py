@@ -1,19 +1,9 @@
 import pygame
-# import pygame_gui
 from GameMaster import GameMaster
+from Modules.UI import UI
 
-BLACK = (10, 10, 10)
-WHITE = (255, 255, 255)
-DARK_BLUE = (75, 75, 255)
-GREY = (150, 150, 150)
-LIGHT_GREY = (200, 200, 200)
-DARK_GREY = (50, 50, 50)
-DARKER_GREY = (25,25,30)
-BLUE = (100,100,200)
-RED = (255,100,100)
 WINDOW_HEIGHT = 720
 WINDOW_WIDTH = 1280
-BORDERSIZE = 2
 
 def main():
     
@@ -35,15 +25,15 @@ def main():
     displayText = False
     dragging = False
     scale = 0
+    ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)
 
+# MAIN LOOP
     while running:
         font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
-        SCREEN.fill(BLACK)
-        drawGrid(gm, time_of_last_click, (offsetx, offsety))
-        drawUI()
+        ui.draw(gm, time_of_last_click, offsetx, offsety)
         
         if displayText:
-            text = font.render('test', True, WHITE, None)
+            text = font.render('test', True, ui.WHITE, None)
             textRect = text.get_rect()
             textRect.center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
             SCREEN.blit(text, textRect)
@@ -64,11 +54,11 @@ def main():
                     dragging = False
                 if event.button == 1:
                     mousePos = pygame.mouse.get_pos()
-                    if clickedInGrid(mousePos):
-                        cell = getClickedCell(gm, mousePos, (offsetx, offsety))
+                    if ui.clickedInGrid(mousePos):
+                        cell = ui.getClickedCell(gm, mousePos, (offsetx, offsety))
                         if cell is not None:
                             # TODO add cell info to banner
-                            cell.setColor(DARK_GREY)
+                            cell.setColor(ui.DARK_GREY)
                             displayText = True
             if event.type == pygame.MOUSEMOTION:
                 if dragging:
@@ -99,60 +89,6 @@ def main():
         pygame.display.update()
 
     pygame.quit()
-    
-    
-def drawCell(gm, cell, x,y,size, timeLastClick):
-    if (pygame.time.get_ticks() - timeLastClick) >= 350:
-        cell.setColor(DARKER_GREY)
-        
-    pygame.draw.rect(SCREEN, cell.getColor(), (x, y, size-BORDERSIZE, size-BORDERSIZE))    
-    if cell.hasObjects():
-        for obj in cell.getItems():
-            if obj in gm.getPlayers():
-                pygame.draw.circle(SCREEN, BLUE, (x+(size/2),y+(size/2)),size/2.5,0,1,1,1,1)
-                text = font.render(obj.getName(), True, WHITE, None)
-                textRect = text.get_rect()
-                textRect.center = (x+(size/2),y+(size/4))
-                SCREEN.blit(text, textRect)
-            if obj in gm.getEnemies():
-                pygame.draw.circle(SCREEN, RED, (x+(size/2),y+(size/2)),size/2.5,0,1,1,1,1)
-                text = font.render(obj.getName(), True, WHITE, None)
-                textRect = text.get_rect()
-                textRect.center = (x+(size/2),y+(size/2))
-                SCREEN.blit(text, textRect)
                 
-
-def drawGrid(gm, timeLastClick, cameraOffset):
-    gridCells = gm.getGridCells()
-    index = 0
-    for i in range(gm.getNumRows()):
-        for j in range(gm.getNumCols()):
-            cell = gridCells[index]
-            drawCell(gm, cell, cell.getXCoord()+(i*cell.getSize())+cameraOffset[0], cell.getYCoord()+(j*cell.getSize())+cameraOffset[1],
-                     cell.getSize(), timeLastClick)
-            index += 1
-  
-def getClickedCell(gm, mousePos, offset):
-    cellSize = gm.getGridCellSize()
-    gridposx, gridposy = mousePos
-    gridposx -= offset[0]
-    gridposy -= offset[1]
-    convertedPos = (int((gridposx - (gridposx/cellSize)) / cellSize), int((gridposy - (gridposy/cellSize)) / cellSize))
-    return gm.getCell(convertedPos)
-
-def clickedInGrid(mousePos):
-    return (mousePos[0] > 0) and (mousePos[1] > 0) and (mousePos[0] < 950) and (mousePos[1] < 500)
-    
-    
-def drawUI():
-    pygame.draw.rect(SCREEN, DARKER_GREY, (0,500,950,720))
-    pygame.draw.rect(SCREEN, DARKER_GREY, (950,0,1280,720))
-    pygame.draw.line(SCREEN,BLACK,(950,500),(950,720))
-    pygame.draw.line(SCREEN,DARK_BLUE,(950,0),(950,500))
-    pygame.draw.line(SCREEN,DARK_BLUE,(0,500),(950,500))
-    pygame.draw.line(SCREEN,DARK_BLUE,(0,1),(950,1))
-    pygame.draw.line(SCREEN,DARK_BLUE,(0,0),(0,500))
-    
-            
 if __name__ == "__main__":
     main()
