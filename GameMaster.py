@@ -96,6 +96,9 @@ class GameMaster:
     
     def getCellColor(self,x,y):
         return self.grid.findCell(x,y).getColor()
+    
+    def setCellColor(self, cell, color):
+        cell.setPermanentColor(color)
         
         
     def listPlayers(self):

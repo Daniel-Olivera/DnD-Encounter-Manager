@@ -8,8 +8,8 @@ WINDOW_WIDTH = 1280
 def main():
     
     gm = GameMaster(50, 50)
-    gm.addPlayer("Ghoulbro", "mage", 100)
-    gm.addEnemy("Goblin", "archer", 100)
+    gm.addPlayer("Evan", "mage", 100)
+    gm.addEnemy("Hunnlef", "archer", 100)
     gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
     gm.placeCharacterOnBoard(gm.getEnemies()[0], 2,3)
     running = True
@@ -32,12 +32,6 @@ def main():
         font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
         ui.draw(gm, time_of_last_click, offsetx, offsety)
         
-        if displayText:
-            text = font.render('test', True, ui.WHITE, None)
-            textRect = text.get_rect()
-            textRect.center = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
-            SCREEN.blit(text, textRect)
-        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -59,7 +53,10 @@ def main():
                         if cell is not None:
                             # TODO add cell info to banner
                             cell.setColor(ui.DARK_GREY)
-                            displayText = True
+                            ui.displayText(cell)
+                    else:
+                        newColor = ui.getClickedColor(mousePos)
+                        ui.changeCellColor(newColor, cell)
             if event.type == pygame.MOUSEMOTION:
                 if dragging:
                     mouse_x, mouse_y = event.pos

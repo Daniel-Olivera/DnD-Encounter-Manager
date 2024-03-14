@@ -6,9 +6,12 @@ class Cell:
         self.x = x
         self.y = y
         self.size = size
+        self.permanentColor_r = 25
+        self.permanentColor_g = 25
+        self.permanentColor_b = 30
         self.color_r = 25
         self.color_g = 25
-        self.color_b = 50
+        self.color_b = 30
         self.cellObjects = set()
     
     def addObject(self, newObject):
@@ -39,6 +42,14 @@ class Cell:
         self.color_r = color[0]
         self.color_g = color[1]
         self.color_b = color[2]
+        
+    def getPermanentColor(self):
+        return (self.permanentColor_r,self.permanentColor_g,self.permanentColor_b)
+    
+    def setPermanentColor(self, color):
+        self.permanentColor_r = color[0]
+        self.permanentColor_g = color[1]
+        self.permanentColor_b = color[2]
     
     def hasObjects(self):
         return self.cellObjects != set()
