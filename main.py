@@ -28,6 +28,7 @@ def main():
     font = pygame.font.Font('freesansbold.ttf', 15)
     displayText = False
     dragging = False
+    scale = 0
 
     while running:
         SCREEN.fill(GREY)
@@ -62,11 +63,16 @@ def main():
                             cell.setColor(LIGHT_GREY)
                             displayText = True
             if event.type == pygame.MOUSEMOTION:
-                print(event.pos)
                 if dragging:
                     mouse_x, mouse_y = event.pos
                     offsetx = mouse_x + drag_start_pos_x
                     offsety = mouse_y + drag_start_pos_y
+            if event.type == pygame.MOUSEWHEEL:
+                if event.y == 1:
+                    scale = 3
+                if event.y == -1:
+                    scale = (-3)
+                gm.setGridCellSize(gm.getGridCellSize() + scale)
     
 
         keys = pygame.key.get_pressed()

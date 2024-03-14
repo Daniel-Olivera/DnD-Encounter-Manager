@@ -33,6 +33,9 @@ class Cell:
     def getSize(self):
         return self.size
     
+    def setSize(self, newSize):
+        self.size = newSize
+    
     def getItems(self):
         return self.cellObjects
     

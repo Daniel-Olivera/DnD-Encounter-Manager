@@ -39,6 +39,8 @@ class Grid:
         
     def setCellSize(self, newCellSize):
         self.cellSize = newCellSize
+        for cell in self.cells:
+            cell.setSize(newCellSize)
         
     def findCell(self, x, y):
         for cell in self.cells:

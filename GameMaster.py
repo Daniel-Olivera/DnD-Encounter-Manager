@@ -29,6 +29,9 @@ class GameMaster:
     def getGridCellSize(self):
         return self.grid.getCellSize()
     
+    def setGridCellSize(self, newSize):
+        self.grid.setCellSize(newSize)
+    
     def getNumRows(self):
         return self.grid.getSize()
     
