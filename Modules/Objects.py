@@ -57,7 +57,7 @@ class Character(Object):
 
     def __init__(self, objType, name, desc, hp):
         super().__init__(objType, name, desc)
-        self.hp = 0
+        self.hp = hp
         self.items = []
         
     def getHP(self):
