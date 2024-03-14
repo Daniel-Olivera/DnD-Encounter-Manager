@@ -22,7 +22,6 @@ def main():
     offsetx = 0
     offsety = 0
     global font
-    displayText = False
     dragging = False
     scale = 0
     ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)

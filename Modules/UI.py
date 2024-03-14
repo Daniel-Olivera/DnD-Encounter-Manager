@@ -1,5 +1,6 @@
 import pygame
 from GameMaster import GameMaster
+from Modules.Objects import Object
 
 # Controls and draws all the UI elements
 class UI:
@@ -112,13 +113,20 @@ class UI:
     def showCellInfo(self, cell):
         if cell is None:
             return
-        cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  "
+        cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  \n\n"
+        if cell.hasObjects():
+            cellPos += "Objects:  "
+            for obj in cell.getItems():
+                cellPos += obj.getName() + "\nDesc:  " + obj.getDescription() 
+                if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
+                    cellPos += "\nHP = " + str(obj.getHP())
+        
         for element in self.elements:
             element.draw()
             
         cellPosText = self.infoFont.render(cellPos, True, self.WHITE, None)
         textRect = cellPosText.get_rect()
-        textRect.center = (((self.WINDOW_WIDTH - 950)/2)+900, 50)
+        textRect.topleft = (((self.WINDOW_WIDTH - 950)/4)+900, 30)
         self.SCREEN.blit(cellPosText, textRect)
     
     def getClickedColor(self, mousePos):        

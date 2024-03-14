@@ -61,7 +61,7 @@ class Character(Object):
         self.items = []
         
     def getHP(self):
-        return self.health
+        return self.hp
     
     def getItems(self):
         return self.items
