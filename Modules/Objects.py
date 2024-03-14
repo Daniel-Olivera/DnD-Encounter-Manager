@@ -3,9 +3,9 @@
 # There can be multiple objects on a grid cell.  
 class Object:
 
-    # TYPE_ITEM = 0
-    # TYPE_ENEMY = 1
-    # TYPE_CHARACTER = 2
+    TYPE_ITEM = 0
+    TYPE_ENEMY = 1
+    TYPE_CHARACTER = 2
     
     def __init__(self, objType, name, desc):
         self.x = 0
@@ -38,9 +38,7 @@ class Item(Object):
     owner = None
     
     def __init__(self, name, desc):
-        self.objType = 0
-        self.name = name
-        self.description = desc
+        super().__init__(Object.TYPE_ITEM, name, desc)
     
     def getOwner(self):
         return self.owner
@@ -56,18 +54,10 @@ class Item(Object):
 # Players or enemies can also have items which are defined above, but not objects.
 # Character items are a list because a character may have many duplicates of an item such as 2 daggers.
 class Character(Object):
-    
-    TYPE_ENEMY = 1
-    TYPE_CHARACTER = 2
-    
-    health = 0
-    items = []
-    
+
     def __init__(self, objType, name, desc, hp):
-        self.objType = objType
-        self.name = name
-        self.description = desc
-        self.health = hp
+        super().__init__(objType, name, desc)
+        self.hp = 0
         self.items = []
         
     def getHP(self):
