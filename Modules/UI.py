@@ -170,6 +170,20 @@ class UI:
             
         return obj
 
+    def drawSelectionBox(self, startx, starty, mousex, mousey):
+        
+        diffx = mousex - startx
+        diffy = mousey - starty
+        
+        if diffx < 0 and diffy < 0:
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, (mousex, mousey, startx-mousex, starty-mousey), 2)
+        elif diffx < 0 and diffy > 0:
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, (mousex, starty, startx-mousex, mousey-starty), 2)
+        elif diffx > 0 and diffy < 0:
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, (startx, mousey, mousex-startx, starty-mousey), 2)
+        else:    
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, (startx, starty, diffx, diffy), 2)
+            
         
     
 

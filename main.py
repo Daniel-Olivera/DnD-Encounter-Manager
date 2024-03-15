@@ -12,8 +12,8 @@ RIGHT_CLICK = 3
 def main():
     
     gm = GameMaster(50, 50)
-    gm.addPlayer("Evan", "mage", 100)
-    gm.addEnemy("Runescape", "archer", 100)
+    gm.addPlayer("Nicole", "mage", 100)
+    gm.addEnemy("Auntie", "archer", 100)
     gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
     gm.placeCharacterOnBoard(gm.getEnemies()[0], 2,3)
     running = True
@@ -27,8 +27,11 @@ def main():
     offsety = 0
     global font
     middleMouseDragging = False
-    mouseOneDragging = False
+    leftMouseDragging = False
+    rightMouseDragging = False
     heldItem = None
+    selection_box_start_pos_x = 0
+    selection_box_start_pos_y = 0
 
     ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)
     selectedCell = None
@@ -39,11 +42,15 @@ def main():
         font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
         ui.draw(gm, time_of_last_click, offsetx, offsety)
         
-        if mouseOneDragging:
+        if leftMouseDragging:
             heldItem = ui.holdObject(pygame.mouse.get_pos(), startDragCell)
+            
+        if rightMouseDragging:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            ui.drawSelectionBox(selection_box_start_pos_x, selection_box_start_pos_y, mouse_x, mouse_y)
         
         for event in pygame.event.get():
-            # Closes the pygame
+            # Closes pygame
             if event.type == pygame.QUIT:
                 running = False
                 
@@ -52,7 +59,7 @@ def main():
                 if event.button == LEFT_CLICK:
                     time_of_last_click = pygame.time.get_ticks()
                     startDragCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
-                    mouseOneDragging = True
+                    leftMouseDragging = True
                     
                 # Handle Middle mouse clicks
                 if event.button == MIDDLE_MOUSE:
@@ -60,6 +67,13 @@ def main():
                     drag_start_pos_x = offsetx - mouse_x
                     drag_start_pos_y = offsety - mouse_y
                     middleMouseDragging = True
+                    
+                # Handle Right mouse clicks
+                if event.button == RIGHT_CLICK:
+                    mouse_x, mouse_y = event.pos
+                    selection_box_start_pos_x = mouse_x
+                    selection_box_start_pos_y = mouse_y
+                    rightMouseDragging = True
                     
             # What happens when the mouse button is released
             if event.type == pygame.MOUSEBUTTONUP:
@@ -70,7 +84,7 @@ def main():
                     if heldItem is not None:
                         newCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
                         gm.moveObjectOnBoard(heldItem, startDragCell.getXCoord(), startDragCell.getYCoord(), newCell.getXCoord(), newCell.getYCoord())
-                    mouseOneDragging = False
+                    leftMouseDragging = False
                     mousePos = pygame.mouse.get_pos()
                     
                     if ui.clickedInGrid(mousePos):
@@ -81,6 +95,9 @@ def main():
                     else:
                         newColor = ui.getClickedColor(mousePos)
                         ui.changeCellColor(newColor, selectedCell)
+                        
+                if event.button == RIGHT_CLICK:
+                    rightMouseDragging = False
                         
             # What happens when the mouse moves
             if event.type == pygame.MOUSEMOTION:
