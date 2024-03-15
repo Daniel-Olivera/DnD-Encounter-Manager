@@ -164,8 +164,11 @@ class UI:
         obj = cell.getItem()
         if obj in self.gm.getPlayers():
             pygame.draw.circle(self.SCREEN, self.BLUE, (x,y),size/2.5,0,1,1,1,1)
+
         if obj in self.gm.getEnemies():
             pygame.draw.circle(self.SCREEN, self.RED, (x,y),size/2.5,0,1,1,1,1)
+            
+        return obj
 
         
     

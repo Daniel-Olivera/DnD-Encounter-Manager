@@ -28,6 +28,7 @@ def main():
     global font
     middleMouseDragging = False
     mouseOneDragging = False
+    heldItem = None
 
     scale = 0
     ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)
@@ -37,6 +38,9 @@ def main():
     while running:
         font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
         ui.draw(gm, time_of_last_click, offsetx, offsety)
+        
+        if mouseOneDragging:
+                    heldItem = ui.holdObject(pygame.mouse.get_pos(), selectedCell)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -58,6 +62,9 @@ def main():
                 if event.button == 2:
                     middleMouseDragging = False
                 if event.button == 1:
+                    if heldItem is not None:
+                        newCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
+                        gm.moveObjectOnBoard(heldItem, selectedCell.getXCoord(), selectedCell.getYCoord(), newCell.getXCoord(), newCell.getYCoord())
                     mouseOneDragging = False
                     mousePos = pygame.mouse.get_pos()
                     if ui.clickedInGrid(mousePos):
@@ -71,8 +78,6 @@ def main():
             if event.type == pygame.MOUSEMOTION:
                 if middleMouseDragging:
                     offsetx, offsety = ui.dragGrid(event.pos, drag_start_pos_x, drag_start_pos_y)
-                if mouseOneDragging:
-                    ui.holdObject(event.pos, selectedCell)
             if event.type == pygame.MOUSEWHEEL:
                 ui.changeZoom(event)
     
