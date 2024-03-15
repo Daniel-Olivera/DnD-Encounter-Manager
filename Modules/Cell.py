@@ -12,13 +12,13 @@ class Cell:
         self.color_r = 25
         self.color_g = 25
         self.color_b = 30
-        self.cellObjects = set()
+        self.cellObject = None
     
     def addObject(self, newObject):
-        self.cellObjects.add(newObject)
+        self.cellObject = newObject
         
-    def removeObject(self, obj):
-        self.cellObjects.discard(obj)
+    def removeObject(self):
+        self.cellObject = None
         
     def getXCoord(self):
         return self.x
@@ -32,8 +32,8 @@ class Cell:
     def setSize(self, newSize):
         self.size = newSize
     
-    def getItems(self):
-        return self.cellObjects
+    def getItem(self):
+        return self.cellObject
     
     def getColor(self):
         return (self.color_r,self.color_g,self.color_b)
@@ -51,6 +51,6 @@ class Cell:
         self.permanentColor_g = color[1]
         self.permanentColor_b = color[2]
     
-    def hasObjects(self):
-        return self.cellObjects != set()
+    def hasObject(self):
+        return self.cellObject != None
     

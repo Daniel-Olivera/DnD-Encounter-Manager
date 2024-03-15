@@ -5,6 +5,10 @@ from Modules.UI import UI
 WINDOW_HEIGHT = 720
 WINDOW_WIDTH = 1280
 
+LEFT_CLICK = 1
+MIDDLE_MOUSE = 2
+RIGHT_CLICK = 3
+
 def main():
     
     gm = GameMaster(50, 50)
@@ -38,15 +42,18 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.MOUSEBUTTONDOWN:
+                # Handle Left Clicks
                 if event.button == 1:
                     time_of_last_click = pygame.time.get_ticks()
-                    selectedCell = ui.getClickedCell(gm, mousePos, (offsetx, offsety))
+                    selectedCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
                     mouseOneDragging = True
+                # Handle Middle mouse clicks
                 if event.button == 2:
                     mouse_x, mouse_y = event.pos  
                     drag_start_pos_x = offsetx - mouse_x
                     drag_start_pos_y = offsety - mouse_y
                     middleMouseDragging = True
+            # What happens when the mouse button is released
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 2:
                     middleMouseDragging = False
@@ -65,7 +72,7 @@ def main():
                 if middleMouseDragging:
                     offsetx, offsety = ui.dragGrid(event.pos, drag_start_pos_x, drag_start_pos_y)
                 if mouseOneDragging:
-                    ui.holdCharacter(event.pos, selectedCell)
+                    ui.holdObject(event.pos, selectedCell)
             if event.type == pygame.MOUSEWHEEL:
                 ui.changeZoom(event)
     

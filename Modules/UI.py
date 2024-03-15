@@ -45,22 +45,22 @@ class UI:
             cell.setColor(cell.getPermanentColor())
         
         pygame.draw.rect(self.SCREEN, cell.getColor(), (x, y, size-self.BORDERSIZE, size-self.BORDERSIZE))    
-        if cell.hasObjects():
-            for obj in cell.getItems():
-                # Draw all the players on the board
-                if obj in gm.getPlayers():
-                    pygame.draw.circle(self.SCREEN, self.BLUE, (x+(size/2),y+(size/2)),size/2.5,0,1,1,1,1)
-                    text = self.font.render(obj.getName(), True, self.WHITE, None)
-                    textRect = text.get_rect()
-                    textRect.center = (x+(size/2),y+(size/4))
-                    self.SCREEN.blit(text, textRect)
-                # Draw all the enemies on the board
-                if obj in gm.getEnemies():
-                    pygame.draw.circle(self.SCREEN, self.RED, (x+(size/2),y+(size/2)),size/2.5,0,1,1,1,1)
-                    text = self.font.render(obj.getName(), True, self.WHITE, None)
-                    textRect = text.get_rect()
-                    textRect.center = (x+(size/2),y+(size/2))
-                    self.SCREEN.blit(text, textRect)
+        if cell.hasObject():
+            obj = cell.getItem()
+            # Draw the player in that cell
+            if obj in gm.getPlayers():
+                pygame.draw.circle(self.SCREEN, self.BLUE, (x+(size/2),y+(size/2)),size/2.5,0,1,1,1,1)
+                text = self.font.render(obj.getName(), True, self.WHITE, None)
+                textRect = text.get_rect()
+                textRect.center = (x+(size/2),y+(size/4))
+                self.SCREEN.blit(text, textRect)
+            # Draw the enemy in that cell
+            if obj in gm.getEnemies():
+                pygame.draw.circle(self.SCREEN, self.RED, (x+(size/2),y+(size/2)),size/2.5,0,1,1,1,1)
+                text = self.font.render(obj.getName(), True, self.WHITE, None)
+                textRect = text.get_rect()
+                textRect.center = (x+(size/2),y+(size/2))
+                self.SCREEN.blit(text, textRect)
     
     # Draws the entire grid on the screen using the drawCell function
     def drawGrid(self, gm, timeLastClick, cameraOffset):
@@ -114,12 +114,12 @@ class UI:
         if cell is None:
             return
         cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  \n\n"
-        if cell.hasObjects():
-            cellPos += "Objects:  "
-            for obj in cell.getItems():
-                cellPos += obj.getName() + "\nDesc:  " + obj.getDescription() 
-                if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
-                    cellPos += "\nHP = " + str(obj.getHP())
+        if cell.hasObject():
+            cellPos += "Object:  "
+            obj = cell.getItem()
+            cellPos += obj.getName() + "\nDesc:  " + obj.getDescription() 
+            if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
+                cellPos += "\nHP = " + str(obj.getHP())
         
         for element in self.elements:
             element.draw()
@@ -156,10 +156,17 @@ class UI:
         offsety = mouse_y + drag_start_pos_y
         return (offsetx, offsety)
     
-    def holdCharacter(self, mousePos, cell):
-        if cell.hasObjects() == False:
+    def holdObject(self, mousePos, cell):
+        if cell.hasObject() == False:
             return
-        
+        size = cell.getSize()
+        x, y = mousePos
+        obj = cell.getItem()
+        if obj in self.gm.getPlayers():
+            pygame.draw.circle(self.SCREEN, self.BLUE, (x,y),size/2.5,0,1,1,1,1)
+        if obj in self.gm.getEnemies():
+            pygame.draw.circle(self.SCREEN, self.RED, (x,y),size/2.5,0,1,1,1,1)
+
         
     
 
