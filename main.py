@@ -43,30 +43,36 @@ def main():
             heldItem = ui.holdObject(pygame.mouse.get_pos(), startDragCell)
         
         for event in pygame.event.get():
+            # Closes the pygame
             if event.type == pygame.QUIT:
                 running = False
+                
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Handle Left Clicks
-                if event.button == 1:
+                if event.button == LEFT_CLICK:
                     time_of_last_click = pygame.time.get_ticks()
                     startDragCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
                     mouseOneDragging = True
+                    
                 # Handle Middle mouse clicks
-                if event.button == 2:
+                if event.button == MIDDLE_MOUSE:
                     mouse_x, mouse_y = event.pos  
                     drag_start_pos_x = offsetx - mouse_x
                     drag_start_pos_y = offsety - mouse_y
                     middleMouseDragging = True
+                    
             # What happens when the mouse button is released
             if event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 2:
+                if event.button == MIDDLE_MOUSE:
                     middleMouseDragging = False
-                if event.button == 1:
+                    
+                if event.button == LEFT_CLICK:
                     if heldItem is not None:
                         newCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
                         gm.moveObjectOnBoard(heldItem, startDragCell.getXCoord(), startDragCell.getYCoord(), newCell.getXCoord(), newCell.getYCoord())
                     mouseOneDragging = False
                     mousePos = pygame.mouse.get_pos()
+                    
                     if ui.clickedInGrid(mousePos):
                         selectedCell = ui.getClickedCell(gm, mousePos, (offsetx, offsety))
                         if selectedCell is not None:
@@ -75,13 +81,17 @@ def main():
                     else:
                         newColor = ui.getClickedColor(mousePos)
                         ui.changeCellColor(newColor, selectedCell)
+                        
+            # What happens when the mouse moves
             if event.type == pygame.MOUSEMOTION:
                 if middleMouseDragging:
                     offsetx, offsety = ui.dragGrid(event.pos, drag_start_pos_x, drag_start_pos_y)
+                    
+            # What happens when you use the scroll wheel
             if event.type == pygame.MOUSEWHEEL:
                 ui.changeZoom(event)
     
-
+        # Handles when keyboard buttons are used
         keys = pygame.key.get_pressed()
         if keys[pygame.K_w] or keys[pygame.K_UP]:
             offsety -= 0.15 * gm.getGridSize()
