@@ -13,7 +13,7 @@ def main():
     
     gm = GameMaster(50, 50)
     gm.addPlayer("Evan", "mage", 100)
-    gm.addEnemy("Hunnlef", "archer", 100)
+    gm.addEnemy("Runescape", "archer", 100)
     gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
     gm.placeCharacterOnBoard(gm.getEnemies()[0], 2,3)
     running = True
@@ -30,9 +30,9 @@ def main():
     mouseOneDragging = False
     heldItem = None
 
-    scale = 0
     ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)
     selectedCell = None
+    startDragCell = None
 
 # MAIN LOOP
     while running:
@@ -40,7 +40,7 @@ def main():
         ui.draw(gm, time_of_last_click, offsetx, offsety)
         
         if mouseOneDragging:
-                    heldItem = ui.holdObject(pygame.mouse.get_pos(), selectedCell)
+            heldItem = ui.holdObject(pygame.mouse.get_pos(), startDragCell)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -49,7 +49,7 @@ def main():
                 # Handle Left Clicks
                 if event.button == 1:
                     time_of_last_click = pygame.time.get_ticks()
-                    selectedCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
+                    startDragCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
                     mouseOneDragging = True
                 # Handle Middle mouse clicks
                 if event.button == 2:
@@ -64,7 +64,7 @@ def main():
                 if event.button == 1:
                     if heldItem is not None:
                         newCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
-                        gm.moveObjectOnBoard(heldItem, selectedCell.getXCoord(), selectedCell.getYCoord(), newCell.getXCoord(), newCell.getYCoord())
+                        gm.moveObjectOnBoard(heldItem, startDragCell.getXCoord(), startDragCell.getYCoord(), newCell.getXCoord(), newCell.getYCoord())
                     mouseOneDragging = False
                     mousePos = pygame.mouse.get_pos()
                     if ui.clickedInGrid(mousePos):
