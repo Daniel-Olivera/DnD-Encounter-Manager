@@ -48,7 +48,7 @@ def main():
         if rightMouseDragging:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             ui.drawSelectionBox(selection_box_start_pos_x, selection_box_start_pos_y, mouse_x, mouse_y)
-        
+
         for event in pygame.event.get():
             # Closes pygame
             if event.type == pygame.QUIT:
@@ -98,6 +98,7 @@ def main():
                         
                 if event.button == RIGHT_CLICK:
                     rightMouseDragging = False
+                    ui.selectMultiple(selection_box_start_pos_x, selection_box_start_pos_y, mouse_x, mouse_y, offsetx, offsety)
                         
             # What happens when the mouse moves
             if event.type == pygame.MOUSEMOTION:

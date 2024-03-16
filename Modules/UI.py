@@ -176,6 +176,7 @@ class UI:
         diffy = mousey - starty
         
         if diffx < 0 and diffy < 0:
+            # mouse is up and left from starting point
             pygame.draw.rect(self.SCREEN, self.DARK_RED, (mousex, mousey, startx-mousex, starty-mousey), 2)
         elif diffx < 0 and diffy > 0:
             pygame.draw.rect(self.SCREEN, self.DARK_RED, (mousex, starty, startx-mousex, mousey-starty), 2)
@@ -184,6 +185,35 @@ class UI:
         else:    
             pygame.draw.rect(self.SCREEN, self.DARK_RED, (startx, starty, diffx, diffy), 2)
             
+    def selectMultiple(self, startx, starty, mousex, mousey, offsetx, offsety):
+    
+        diffx = mousex - startx
+        diffy = mousey - starty
+        cells = []
+        cellSize = self.gm.getGridCellSize()
+        
+        if diffx < 0 and diffy < 0:
+            # mouse is up and left from starting point
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, (mousex, mousey, startx-mousex, starty-mousey), 2)
+            
+            for i in range (int((startx - mousex)/cellSize)+1):
+                for j in range(int((starty - mousey)/cellSize)+1):
+                    cells.append(self.gm.getCell((i, j)))
+            
+        elif diffx < 0 and diffy > 0:
+            # mouse is below and left from starting point
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, (mousex, starty, startx-mousex, mousey-starty), 2)
+        elif diffx > 0 and diffy < 0:
+            # mouse is up and right from starting point
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, (startx, mousey, mousex-startx, starty-mousey), 2)
+        else:    
+            # mouse is down and right from starting point
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, (startx, starty, diffx, diffy), 2)
+            
+        print((startx, starty), (mousex, mousey) , ":" , len(cells) , "found")
+        return cells
+            
+        
         
     
 
