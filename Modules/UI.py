@@ -189,7 +189,7 @@ class UI:
         else:    
             pygame.draw.rect(self.SCREEN, self.DARK_RED, (startx, starty, diffx, diffy), 2)
             
-    def selectMultiple(self, startx, starty, mousex, mousey, offsetx, offsety):
+    def selectMultiple(self, startx, starty, mousex, mousey):
     
         diffx = mousex - startx
         diffy = mousey - starty
@@ -198,21 +198,26 @@ class UI:
         
         if diffx < 0 and diffy < 0:
             # mouse is up and left from starting point
-            pygame.draw.rect(self.SCREEN, self.DARK_RED, (mousex, mousey, startx-mousex, starty-mousey), 2)
-            
             for j in range(mousey,starty,cellSize):
                 for i in range(mousex,startx,cellSize):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
             
         elif diffx < 0 and diffy > 0:
             # mouse is below and left from starting point
-            pygame.draw.rect(self.SCREEN, self.DARK_RED, (mousex, starty, startx-mousex, mousey-starty), 2)
+            for j in range(starty,mousey,cellSize):
+                for i in range(mousex,startx,cellSize):
+                    cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
+                    
         elif diffx > 0 and diffy < 0:
             # mouse is up and right from starting point
-            pygame.draw.rect(self.SCREEN, self.DARK_RED, (startx, mousey, mousex-startx, starty-mousey), 2)
+            for j in range(mousey,starty,cellSize):
+                for i in range(startx,mousex,cellSize):
+                    cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
         else:    
             # mouse is down and right from starting point
-            pygame.draw.rect(self.SCREEN, self.DARK_RED, (startx, starty, diffx, diffy), 2)
+            for j in range(starty,mousey,cellSize):
+                for i in range(startx,mousex,cellSize):
+                    cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
             
         print((startx, starty), (mousex, mousey) , ":" , len(cells) , "found")
         return cells

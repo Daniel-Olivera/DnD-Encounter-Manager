@@ -98,7 +98,7 @@ def main():
                         
                 if event.button == RIGHT_CLICK:
                     rightMouseDragging = False
-                    selectedCell = ui.selectMultiple(selection_box_start_pos_x, selection_box_start_pos_y, mouse_x, mouse_y, offsetx, offsety)
+                    selectedCell = ui.selectMultiple(selection_box_start_pos_x, selection_box_start_pos_y, mouse_x, mouse_y)
                         
             # What happens when the mouse moves
             if event.type == pygame.MOUSEMOTION:
