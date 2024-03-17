@@ -99,9 +99,12 @@ class UI:
         
     # The overall draw function which calls other draw functions to encapsulate 
     # it all into one function call
-    def draw(self,gm, time_of_last_click, offsetx, offsety):
+    def draw(self,gm, time_of_last_click, offsetx, offsety, selection):
+        self.offsetx = offsetx
+        self.offsety = offsety
         self.SCREEN.fill(self.BLACK)
         self.drawGrid(gm, time_of_last_click, (offsetx, offsety))
+        self.drawSelection(selection)
         self.drawUI()
         if self.displayCellInfo:
             self.showCellInfo(self.cellToDisplay)
@@ -196,9 +199,9 @@ class UI:
             # mouse is up and left from starting point
             pygame.draw.rect(self.SCREEN, self.DARK_RED, (mousex, mousey, startx-mousex, starty-mousey), 2)
             
-            for i in range (int((startx - mousex)/cellSize)+1):
-                for j in range(int((starty - mousey)/cellSize)+1):
-                    cells.append(self.gm.getCell((i, j)))
+            for j in range(mousey,starty,cellSize):
+                for i in range(mousex,startx,cellSize):
+                    cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
             
         elif diffx < 0 and diffy > 0:
             # mouse is below and left from starting point
@@ -212,11 +215,21 @@ class UI:
             
         print((startx, starty), (mousex, mousey) , ":" , len(cells) , "found")
         return cells
-            
-        
-        
     
-
+    def drawSelection(self, selection):
+        if selection is None:
+            return
+        elif selection is list():
+            for cell in selection:
+                size = cell.getSize()
+                pygame.draw.rect(self.SCREEN, self.DARK_RED, (cell.getXCoord()*size, cell.getYCoord()*size, size()-self.BORDERSIZE, size()-self.BORDERSIZE), 2)
+        else:
+            size = selection.getSize()
+            x = selection.getXCoord()
+            y = selection.getYCoord()
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((x*size) + self.offsetx + x, (y*size) + self.offsety + y, size-self.BORDERSIZE, size-self.BORDERSIZE), 2)
+            
+            
 # Building block for any ui element
 # Any element should be a subclass of this one
 class UIElement:
