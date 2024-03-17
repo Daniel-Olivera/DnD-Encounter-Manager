@@ -1,6 +1,7 @@
 import pygame
 from GameMaster import GameMaster
 from Modules.Objects import Object
+import numpy as np
 
 # Controls and draws all the UI elements
 class UI:
@@ -219,10 +220,20 @@ class UI:
     def drawSelection(self, selection):
         if selection is None:
             return
-        elif selection is list():
+        elif isinstance(selection, list):
+            min_x = 99999
+            min_y = 99999
+            max_x = 0
+            max_y = 0
             for cell in selection:
                 size = cell.getSize()
-                pygame.draw.rect(self.SCREEN, self.DARK_RED, (cell.getXCoord()*size, cell.getYCoord()*size, size()-self.BORDERSIZE, size()-self.BORDERSIZE), 2)
+                min_x = min(cell.getXCoord(),min_x)
+                min_y = min(cell.getYCoord(),min_y)
+                max_x = max(cell.getXCoord(),max_x)
+                max_y = max(cell.getYCoord(),max_y)
+
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((min_x*size) + self.offsetx + min_x, (min_y*size) + self.offsety + min_y, (1+max_x-min_x)*size, (1+max_y-min_y)*size), 2)
+            
         else:
             size = selection.getSize()
             x = selection.getXCoord()
