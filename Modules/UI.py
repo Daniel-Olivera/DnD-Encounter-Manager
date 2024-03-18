@@ -31,6 +31,7 @@ class UI:
         self.offsety = 0
         self.displayCellInfo = False
         self.cellToDisplay = None
+        self.gridBorderScale = 0
         self.font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
         self.infoFont = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/3))
         self.colorBoxCoords = [((1090,50),(30,30)), ((1125,50),(30,30)), ((1160,50),(30,30)), ((1195,50),(30,30))]
@@ -65,6 +66,10 @@ class UI:
     
     # Draws the entire grid on the screen using the drawCell function
     def drawGrid(self, gm, timeLastClick, cameraOffset):
+        gridSize = self.gm.getGridSize()
+        cellSize = self.gm.getGridCellSize()
+        gridBorderWidth = gridBorderHeight = (cellSize*(gridSize+1)) - self.gridBorderScale + 2
+        pygame.draw.rect(self.SCREEN,self.DARK_BLUE,(-2+self.offsetx,-2+self.offsety,gridBorderWidth, gridBorderHeight),2)
         gridCells = gm.getGridCells()
         index = 0
         for i in range(gm.getNumRows()):
@@ -175,10 +180,12 @@ class UI:
         
     def changeZoom(self, event):
         if event.y == 1:
-            scale = 3
+            self.scale = 3
+            self.gridBorderScale += 3
         if event.y == -1:
-            scale = (-3)
-        self.gm.setGridCellSize(self.gm.getGridCellSize() + scale)
+            self.scale = (-3)
+            self.gridBorderScale -= 3
+        self.gm.setGridCellSize(self.gm.getGridCellSize() + self.scale)
         
     def dragGrid(self, mousePos, drag_start_pos_x, drag_start_pos_y):
         mouse_x, mouse_y = mousePos
@@ -269,7 +276,7 @@ class UI:
                 max_x = max(cell.getXCoord(),max_x)
                 max_y = max(cell.getYCoord(),max_y)
 
-            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((min_x*size) + self.offsetx + min_x, (min_y*size) + self.offsety + min_y, (1+max_x-min_x)*size, (1+max_y-min_y)*size), 2)
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((min_x*size) + self.offsetx + min_x, (min_y*size) + self.offsety + min_y, (self.BORDERSIZE+max_x-min_x)*size+self.BORDERSIZE, (self.BORDERSIZE+max_y-min_y)*size+self.BORDERSIZE), 2)
             
         else:
             x = selection.getXCoord()

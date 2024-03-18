@@ -19,6 +19,9 @@ class GameMaster:
     
     def getGridSize(self):
         return self.grid.getSize()
+    
+    def getGridNumCells(self):
+        return self.grid.getNumCells()
         
     def getCell(self, pos):
         return self.grid.findCell(pos[0], pos[1])
@@ -101,8 +104,7 @@ class GameMaster:
         if cell is None:
             return
         cell.setPermanentColor(color)
-        
-        
+                
     def listPlayers(self):
         print("*---- PLAYERS ----*")
         for player in self.players:
