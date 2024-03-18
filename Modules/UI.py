@@ -144,7 +144,7 @@ class UI:
                 min_y = min(tile.getYCoord(),min_y)
                 max_x = max(tile.getXCoord(),max_x)
                 max_y = max(tile.getYCoord(),max_y)
-            
+                
             cellPos = "Cells: (" + str(min_x) + "," + str(min_y) + ") - (" + str(max_x) + "," + str(max_y) + ")" + "\n\nColors:  "
             
         else:            
