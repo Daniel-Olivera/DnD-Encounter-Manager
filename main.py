@@ -87,7 +87,8 @@ def main():
                 if event.button == LEFT_CLICK:
                     if heldItem is not None:
                         newCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
-                        gm.moveObjectOnBoard(heldItem, startDragCell.getXCoord(), startDragCell.getYCoord(), newCell.getXCoord(), newCell.getYCoord())
+                        if newCell is not None:
+                            gm.moveObjectOnBoard(heldItem, startDragCell.getXCoord(), startDragCell.getYCoord(), newCell.getXCoord(), newCell.getYCoord())
                     leftMouseDragging = False
                     mousePos = pygame.mouse.get_pos()
                     

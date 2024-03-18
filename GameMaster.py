@@ -78,7 +78,8 @@ class GameMaster:
         self.grid.removeObjectFromCell(x,y,item)
         
     def moveObjectOnBoard(self, obj, x1, y1, x2, y2):
-        self.grid.moveObject(x1,y1,obj,x2,y2)
+        if self.grid.findCell(x2,y2) is not None:
+            self.grid.moveObject(x1,y1,obj,x2,y2)
         
     def giveItemToCharacter(self, item, character):
         item.setOwner(character)
