@@ -275,13 +275,22 @@ class UI:
                 min_y = min(cell.getYCoord(),min_y)
                 max_x = max(cell.getXCoord(),max_x)
                 max_y = max(cell.getYCoord(),max_y)
+                
+            selectionBorderWidth = ((max_x - min_x)*size)+(self.BORDERSIZE)+size
+            selectionBorderHeight = ((max_y - min_y)*size)+(self.BORDERSIZE)+size
 
-            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((min_x*size) + self.offsetx + min_x, (min_y*size) + self.offsety + min_y, (self.BORDERSIZE+max_x-min_x)*size+self.BORDERSIZE-size, (self.BORDERSIZE+max_y-min_y)*size+self.BORDERSIZE-size), 2)
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((min_x*size) + self.offsetx + min_x, 
+                                                          (min_y*size) + self.offsety + min_y, 
+                                                          selectionBorderWidth, 
+                                                          selectionBorderHeight), 2)
             
         else:
             x = selection.getXCoord()
             y = selection.getYCoord()
-            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((x*size) + self.offsetx + x, (y*size) + self.offsety + y, size-self.BORDERSIZE, size-self.BORDERSIZE), 2)
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((x*size) + self.offsetx + x, 
+                                                          (y*size) + self.offsety + y, 
+                                                          size-self.BORDERSIZE, 
+                                                          size-self.BORDERSIZE), 2)
             
             
 # Building block for any ui element
