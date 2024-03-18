@@ -276,7 +276,7 @@ class UI:
                 max_x = max(cell.getXCoord(),max_x)
                 max_y = max(cell.getYCoord(),max_y)
 
-            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((min_x*size) + self.offsetx + min_x, (min_y*size) + self.offsety + min_y, (self.BORDERSIZE+max_x-min_x)*size+self.BORDERSIZE, (self.BORDERSIZE+max_y-min_y)*size+self.BORDERSIZE), 2)
+            pygame.draw.rect(self.SCREEN, self.DARK_RED, ((min_x*size) + self.offsetx + min_x, (min_y*size) + self.offsety + min_y, (self.BORDERSIZE+max_x-min_x)*size+self.BORDERSIZE-size, (self.BORDERSIZE+max_y-min_y)*size+self.BORDERSIZE-size), 2)
             
         else:
             x = selection.getXCoord()
