@@ -114,16 +114,36 @@ class UI:
         self.displayCellInfo = True
         self.cellToDisplay = cell
         
+    def hideText(self):
+        self.displayCellInfo = False
+        
     def showCellInfo(self, cell):
         if cell is None:
             return
-        cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  \n\n"
-        if cell.hasObject():
-            cellPos += "Object:  "
-            obj = cell.getItem()
-            cellPos += obj.getName() + "\nDesc:  " + obj.getDescription() 
-            if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
-                cellPos += "\nHP = " + str(obj.getHP())
+        
+        cellPos = ""
+        
+        if isinstance(cell, list):
+            min_x = 99999
+            min_y = 99999
+            max_x = 0
+            max_y = 0
+            for tile in cell:
+                min_x = min(tile.getXCoord(),min_x)
+                min_y = min(tile.getYCoord(),min_y)
+                max_x = max(tile.getXCoord(),max_x)
+                max_y = max(tile.getYCoord(),max_y)
+            
+            cellPos = "Cells: (" + str(min_x) + "," + str(min_y) + ") - (" + str(max_x) + "," + str(max_y) + ")" + "\n\nColors:  "
+            
+        else:            
+            cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  \n\n"
+            if cell.hasObject():
+                cellPos += "Object:  "
+                obj = cell.getItem()
+                cellPos += obj.getName() + "\nDesc:  " + obj.getDescription() 
+                if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
+                    cellPos += "\nHP = " + str(obj.getHP())
         
         for element in self.elements:
             element.draw()
@@ -145,7 +165,11 @@ class UI:
             return
         if cell is None:
             return
-        self.gm.setCellColor(cell, newColor)
+        elif isinstance(cell,list):
+            for tile in cell:
+                self.gm.setCellColor(tile,newColor)
+        else:
+            self.gm.setCellColor(cell, newColor)
         
     def changeZoom(self, event):
         if event.y == 1:
@@ -198,28 +222,27 @@ class UI:
         
         if diffx < 0 and diffy < 0:
             # mouse is up and left from starting point
-            for j in range(mousey,starty,cellSize):
-                for i in range(mousex,startx,cellSize):
+            for j in range(mousey-self.offsety,starty-self.offsety,cellSize):
+                for i in range(mousex-self.offsetx,startx-self.offsetx,cellSize):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
             
         elif diffx < 0 and diffy > 0:
             # mouse is below and left from starting point
-            for j in range(starty,mousey,cellSize):
-                for i in range(mousex,startx,cellSize):
+            for j in range(starty-self.offsety,mousey-self.offsety,cellSize):
+                for i in range(mousex-self.offsetx,startx-self.offsetx,cellSize):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
                     
         elif diffx > 0 and diffy < 0:
             # mouse is up and right from starting point
-            for j in range(mousey,starty,cellSize):
-                for i in range(startx,mousex,cellSize):
+            for j in range(mousey-self.offsety,starty-self.offsety,cellSize):
+                for i in range(startx-self.offsetx,mousex-self.offsetx,cellSize):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
         else:    
             # mouse is down and right from starting point
-            for j in range(starty,mousey,cellSize):
-                for i in range(startx,mousex,cellSize):
+            for j in range(starty-self.offsety,mousey-self.offsety,cellSize):
+                for i in range(startx-self.offsetx,mousex-self.offsetx,cellSize):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
             
-        print((startx, starty), (mousex, mousey) , ":" , len(cells) , "found")
         return cells
     
     def drawSelection(self, selection):

@@ -42,6 +42,9 @@ def main():
         font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
         ui.draw(gm, time_of_last_click, offsetx, offsety, selectedCell)
         
+        if selectedCell is None:
+            ui.hideText()
+        
         if leftMouseDragging:
             heldItem = ui.holdObject(pygame.mouse.get_pos(), startDragCell)
             
@@ -80,6 +83,7 @@ def main():
                 if event.button == MIDDLE_MOUSE:
                     middleMouseDragging = False
                     
+                # When left mouse is released
                 if event.button == LEFT_CLICK:
                     if heldItem is not None:
                         newCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
@@ -95,10 +99,12 @@ def main():
                     else:
                         newColor = ui.getClickedColor(mousePos)
                         ui.changeCellColor(newColor, selectedCell)
-                        
+                
+                # When right mouse is released
                 if event.button == RIGHT_CLICK:
                     rightMouseDragging = False
                     selectedCell = ui.selectMultiple(selection_box_start_pos_x, selection_box_start_pos_y, mouse_x, mouse_y)
+                    ui.displayText(selectedCell)
                         
             # What happens when the mouse moves
             if event.type == pygame.MOUSEMOTION:
