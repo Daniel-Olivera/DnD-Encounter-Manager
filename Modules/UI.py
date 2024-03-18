@@ -129,6 +129,8 @@ class UI:
             max_x = 0
             max_y = 0
             for tile in cell:
+                if tile is None:
+                    continue
                 min_x = min(tile.getXCoord(),min_x)
                 min_y = min(tile.getYCoord(),min_y)
                 max_x = max(tile.getXCoord(),max_x)
@@ -185,6 +187,8 @@ class UI:
         return (offsetx, offsety)
     
     def holdObject(self, mousePos, cell):
+        if cell is None:
+            return
         if cell.hasObject() == False:
             return
         size = cell.getSize()
@@ -243,9 +247,13 @@ class UI:
                 for i in range(startx-self.offsetx,mousex-self.offsetx,cellSize):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
             
+        if len(cells) == 0:
+            return None
+
         return cells
     
     def drawSelection(self, selection):
+        size = self.gm.getGridCellSize()
         if selection is None:
             return
         elif isinstance(selection, list):
@@ -254,7 +262,8 @@ class UI:
             max_x = 0
             max_y = 0
             for cell in selection:
-                size = cell.getSize()
+                if cell is None:
+                    continue
                 min_x = min(cell.getXCoord(),min_x)
                 min_y = min(cell.getYCoord(),min_y)
                 max_x = max(cell.getXCoord(),max_x)
@@ -263,7 +272,6 @@ class UI:
             pygame.draw.rect(self.SCREEN, self.DARK_RED, ((min_x*size) + self.offsetx + min_x, (min_y*size) + self.offsety + min_y, (1+max_x-min_x)*size, (1+max_y-min_y)*size), 2)
             
         else:
-            size = selection.getSize()
             x = selection.getXCoord()
             y = selection.getYCoord()
             pygame.draw.rect(self.SCREEN, self.DARK_RED, ((x*size) + self.offsetx + x, (y*size) + self.offsety + y, size-self.BORDERSIZE, size-self.BORDERSIZE), 2)

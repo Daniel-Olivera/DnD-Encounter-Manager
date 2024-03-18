@@ -98,6 +98,8 @@ class GameMaster:
         return self.grid.findCell(x,y).getColor()
     
     def setCellColor(self, cell, color):
+        if cell is None:
+            return
         cell.setPermanentColor(color)
         
         
