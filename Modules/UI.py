@@ -69,6 +69,7 @@ class UI:
         gridSize = self.gm.getGridSize()
         cellSize = self.gm.getGridCellSize()
         gridBorderWidth = gridBorderHeight = (cellSize*(gridSize+1)) - self.gridBorderScale + 2
+        # Draws blue square around the playing field
         pygame.draw.rect(self.SCREEN,self.DARK_BLUE,(-2+self.offsetx,-2+self.offsety,gridBorderWidth, gridBorderHeight),2)
         gridCells = gm.getGridCells()
         index = 0
@@ -91,7 +92,10 @@ class UI:
     # Checks if the user clicked in the gameboard window
     def clickedInGrid(self, mousePos):
         mousePosX, mousePosY = mousePos
-        return (mousePosX > 0) and (mousePosY > 0) and (mousePosX < 950) and (mousePosY < 500)
+        gridSize = self.gm.getGridSize()
+        cellSize = self.gm.getGridCellSize()
+        gridBorderWidth = gridBorderHeight = (cellSize*(gridSize+1)) - self.gridBorderScale + 2
+        return (mousePosX > 0) and (mousePosY > 0) and (mousePosX < gridBorderWidth) and (mousePosY < gridBorderHeight) and (mousePosX < 950) and (mousePosY < 500)
     
     # Draws the UI sections where cell controls and info will appear
     def drawUI(self):
