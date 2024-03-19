@@ -36,7 +36,7 @@ def main():
     ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)
     selectedCell = None
     startDragCell = None
-
+# TODO: Fix characters can eat eachother if you put them on the same square
 # MAIN LOOP
     while running:
         font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))

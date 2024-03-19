@@ -235,10 +235,12 @@ class UI:
         cells = []
         cellSize = self.gm.getGridCellSize()
         
+        #TODO: Fix floats in the for loops below
+        
         if diffx < 0 and diffy < 0:
             # mouse is up and left from starting point
-            for j in range(mousey-self.offsety,starty-self.offsety,cellSize):
-                for i in range(mousex-self.offsetx,startx-self.offsetx,cellSize):
+            for j in range(int(mousey-self.offsety),int(starty-self.offsety),int(cellSize)):
+                for i in range(int(mousex-self.offsetx),int(startx-self.offsetx),int(cellSize)):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
             
         elif diffx < 0 and diffy > 0:
