@@ -234,9 +234,7 @@ class UI:
         diffy = mousey - starty
         cells = []
         cellSize = self.gm.getGridCellSize()
-        
-        #TODO: Fix floats in the for loops below
-        
+                
         if diffx < 0 and diffy < 0:
             # mouse is up and left from starting point
             for j in range(int(mousey-self.offsety),int(starty-self.offsety),int(cellSize)):
@@ -245,19 +243,19 @@ class UI:
             
         elif diffx < 0 and diffy > 0:
             # mouse is below and left from starting point
-            for j in range(starty-self.offsety,mousey-self.offsety,cellSize):
-                for i in range(mousex-self.offsetx,startx-self.offsetx,cellSize):
+            for j in range(int(starty-self.offsety),int(mousey-self.offsety),cellSize):
+                for i in range(int(mousex-self.offsetx),int(startx-self.offsetx),cellSize):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
                     
         elif diffx > 0 and diffy < 0:
             # mouse is up and right from starting point
-            for j in range(mousey-self.offsety,starty-self.offsety,cellSize):
-                for i in range(startx-self.offsetx,mousex-self.offsetx,cellSize):
+            for j in range(int(mousey-self.offsety),int(starty-self.offsety),cellSize):
+                for i in range(int(startx-self.offsetx),int(mousex-self.offsetx),cellSize):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
         else:    
             # mouse is down and right from starting point
-            for j in range(starty-self.offsety,mousey-self.offsety,cellSize):
-                for i in range(startx-self.offsetx,mousex-self.offsetx,cellSize):
+            for j in range(int(starty-self.offsety),int(mousey-self.offsety),cellSize):
+                for i in range(int(startx-self.offsetx),int(mousex-self.offsetx),cellSize):
                     cells.append(self.gm.getCell((int(i/cellSize), int(j/cellSize))))
             
         if len(cells) == 0:
