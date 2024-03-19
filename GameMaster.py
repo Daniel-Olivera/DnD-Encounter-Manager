@@ -6,13 +6,11 @@ from Modules.Objects import Character
 class GameMaster:
     
     def __init__(self, gridSize, cellSize):
-        self.numPlayers = 0
-        self.numEnemies = 0
-        self.numItems = 0
         self.grid = Grid(gridSize, cellSize)
         self.players = []
         self.enemies = []
         self.items = []
+        self.initiativeOrder = []
         
     def getGrid(self):
         return self.grid
@@ -42,28 +40,24 @@ class GameMaster:
         return self.grid.getCells()
         
     def addPlayer(self, name, desc, hp):
-        self.players.append(Character(Character.TYPE_CHARACTER, name, desc, hp))
-        self.numPlayers += 1
+        newPlayer = Character(Character.TYPE_CHARACTER, name, desc, hp)
+        self.players.append(newPlayer)
         
     def addEnemy(self, name, desc, hp):
-        self.enemies.append(Character(Character.TYPE_CHARACTER, name, desc, hp))
-        self.numEnemies += 1
+        newEnemy = Character(Character.TYPE_ENEMY, name, desc, hp)
+        self.enemies.append(newEnemy)
         
     def addItem(self, name, desc):
         self.items.append(Item(name, desc))
-        self.numItems += 1
         
     def removePlayer(self, player):
         self.players.remove(player)
-        self.numPlayers -= 1
         
     def removeEnemy(self, enemy):
         self.enemies.remove(enemy)
-        self.numEnemies -= 1
         
     def removeItem(self, item):
         self.items.remove(item)
-        self.numItems -= 1
         
     def placeCharacterOnBoard(self, character, x, y):
         self.grid.addObjectToCell(x,y,character)

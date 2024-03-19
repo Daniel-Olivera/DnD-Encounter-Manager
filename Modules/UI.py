@@ -35,11 +35,20 @@ class UI:
         self.font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
         self.infoFont = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/3))
         self.colorBoxCoords = [((1090,50),(30,30)), ((1125,50),(30,30)), ((1160,50),(30,30)), ((1195,50),(30,30))]
-        self.elements = [Button(self.SCREEN, None,1090,50,30,30,Button.BUTTON_TYPE_RECT,self.DARKER_GREY),
+        self.colorPickingButtons = [
+                         Button(self.SCREEN, None,1090,50,30,30,Button.BUTTON_TYPE_RECT,self.DARKER_GREY),
                          Button(self.SCREEN, None,1125,50,30,30,Button.BUTTON_TYPE_RECT,self.BLACK),
                          Button(self.SCREEN, None,1160,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_RED),
                          Button(self.SCREEN, None,1195,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_BLUE)]
-        
+        self.characterPortraits = []
+        portraitXCoord = 30
+        for character in gm.getPlayers():
+            self.characterPortraits.append(CharacterPortrait(self.SCREEN, character,portraitXCoord,530,CharacterPortrait.TYPE_PLAYER))
+            portraitXCoord += CharacterPortrait.PORTRAIT_WIDTH + 10
+        for enemy in gm.getEnemies():
+            self.characterPortraits.append(CharacterPortrait(self.SCREEN, enemy,portraitXCoord,530,CharacterPortrait.TYPE_ENEMY))
+            portraitXCoord += CharacterPortrait.PORTRAIT_WIDTH + 10
+            
     # Draws a single cell of the grid, along with any items or characters that are in that cell
     def drawCell(self, gm, cell, x,y,size, timeLastClick):
         # Resets the color of a cell to its original after being clicked
@@ -106,6 +115,8 @@ class UI:
         pygame.draw.line(self.SCREEN,self.DARK_BLUE,(0,500),(950,500))
         pygame.draw.line(self.SCREEN,self.DARK_BLUE,(0,1),(950,1))
         pygame.draw.line(self.SCREEN,self.DARK_BLUE,(0,0),(0,500))
+        for character in self.characterPortraits:
+            character.draw()
         
     # The overall draw function which calls other draw functions to encapsulate 
     # it all into one function call
@@ -156,7 +167,7 @@ class UI:
                 if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
                     cellPos += "\nHP = " + str(obj.getHP())
         
-        for element in self.elements:
+        for element in self.colorPickingButtons:
             element.draw()
             
         cellPosText = self.infoFont.render(cellPos, True, self.WHITE, None)
@@ -165,7 +176,7 @@ class UI:
         self.SCREEN.blit(cellPosText, textRect)
     
     def getClickedColor(self, mousePos):        
-        for button in self.elements:
+        for button in self.colorPickingButtons:
             if button.isClicked(mousePos):
                 return button.color
     
@@ -331,3 +342,25 @@ class Button(UIElement):
                 pygame.draw.rect(self.SCREEN, UI.DARK_BLUE, (x1,y1,x2,y2),2)
             else:
                 pygame.draw.rect(self.SCREEN, self.color, (x1,y1,x2,y2))
+                
+class CharacterPortrait(UIElement):
+    
+    TYPE_PLAYER = 0
+    TYPE_ENEMY = 1
+    PORTRAIT_WIDTH = 120
+    PORTRAIT_HEIGHT = 150
+    
+    def __init__(self, SCREEN, character, x1, y1, type):
+        super().__init__(SCREEN, character.getName(), x1,y1,self.PORTRAIT_WIDTH,self.PORTRAIT_HEIGHT)
+        self.type = type
+        if type == self.TYPE_PLAYER:
+            self.color = UI.DARK_BLUE
+        else:
+            self.color = UI.DARK_RED
+    
+    def draw(self):
+        self.__drawPortrait()        
+        
+    def __drawPortrait(self):
+        x1,y1,x2,y2 = self.boundingBox
+        pygame.draw.rect(self.SCREEN, self.color, (x1,y1,x2,y2),2)
