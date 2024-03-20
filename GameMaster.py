@@ -10,7 +10,6 @@ class GameMaster:
         self.players = []
         self.enemies = []
         self.items = []
-        self.initiativeOrder = []
         
     def getGrid(self):
         return self.grid
@@ -38,6 +37,11 @@ class GameMaster:
         
     def getGridCells(self):
         return self.grid.getCells()
+    
+    def getActiveParticipants(self):
+        activeParticipants = self.players + self.enemies
+        activeParticipants.sort(key = lambda x: x.getInitiative(), reverse=True)
+        return activeParticipants
         
     def addPlayer(self, name, desc, hp):
         newPlayer = Character(Character.TYPE_CHARACTER, name, desc, hp)

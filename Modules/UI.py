@@ -42,12 +42,10 @@ class UI:
                          Button(self.SCREEN, None,1195,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_BLUE)]
         self.characterPortraits = []
         portraitXCoord = 30
-        for character in gm.getPlayers():
-            self.characterPortraits.append(CharacterPortrait(self.SCREEN, character,portraitXCoord,530,CharacterPortrait.TYPE_PLAYER))
+        for character in gm.getActiveParticipants():
+            self.characterPortraits.append(CharacterPortrait(self.SCREEN, character,portraitXCoord,530,character.getType()))
             portraitXCoord += CharacterPortrait.PORTRAIT_WIDTH + 10
-        for enemy in gm.getEnemies():
-            self.characterPortraits.append(CharacterPortrait(self.SCREEN, enemy,portraitXCoord,530,CharacterPortrait.TYPE_ENEMY))
-            portraitXCoord += CharacterPortrait.PORTRAIT_WIDTH + 10
+
             
     # Draws a single cell of the grid, along with any items or characters that are in that cell
     def drawCell(self, gm, cell, x,y,size, timeLastClick):
@@ -353,7 +351,7 @@ class CharacterPortrait(UIElement):
     def __init__(self, SCREEN, character, x1, y1, type):
         super().__init__(SCREEN, character.getName(), x1,y1,self.PORTRAIT_WIDTH,self.PORTRAIT_HEIGHT)
         self.type = type
-        if type == self.TYPE_PLAYER:
+        if type == Object.TYPE_CHARACTER:
             self.color = UI.DARK_BLUE
         else:
             self.color = UI.DARK_RED

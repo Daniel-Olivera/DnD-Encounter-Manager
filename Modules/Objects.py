@@ -59,6 +59,7 @@ class Character(Object):
         super().__init__(objType, name, desc)
         self.hp = hp
         self.items = []
+        self.initiative = 0
         
     def getHP(self):
         return self.hp
@@ -71,6 +72,12 @@ class Character(Object):
         
     def giveItem(self, item):
         self.items.append(item)
+        
+    def getInitiative(self):
+        return self.initiative
+    
+    def setInitiative(self, initiative):
+        self.initiative = initiative
         
     def __str__(self):
         return "Name: {0}\nDescription: {1}\nHP: {2}\nItems: ".format(self.getName(), self.getDescription(), self.getHP())
