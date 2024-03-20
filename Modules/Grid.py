@@ -49,11 +49,8 @@ class Grid:
         cell.removeObject()
         
     def moveObject(self, x1, y1, obj, x2, y2):
-        cell1 = self.findCell(x1,y1)
-        cell2 = self.findCell(x2,y2)
-        cell1.removeObject()
-        cell2.addObject(obj)
-        obj.setPos(x2,y2)
+        self.removeObjectFromCell(x1,y1)
+        self.addObjectToCell(x2,y2,obj)
                 
     def printCells(self):
         for cell in self.cells:

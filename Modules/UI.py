@@ -1,6 +1,6 @@
 import pygame
 from GameMaster import GameMaster
-from Modules.Objects import Object
+from Modules.Objects import *
 import numpy as np
 
 # Controls and draws all the UI elements
@@ -206,14 +206,17 @@ class UI:
         offsety = mouse_y + drag_start_pos_y
         return (offsetx, offsety)
     
-    def holdObject(self, mousePos, cell):
-        if cell is None:
+    def holdObject(self, mousePos, uiElement):
+        if uiElement is None:
             return
-        if cell.hasObject() == False:
-            return
-        size = cell.getSize()
+        if not isinstance(uiElement, CharacterPortrait):
+            if uiElement.hasObject() == False:
+                return
+            obj = uiElement.getItem()
+        else:    
+            obj = uiElement.getCharacter()
+        size = self.gm.getGridCellSize()
         x, y = mousePos
-        obj = cell.getItem()
         if obj in self.gm.getPlayers():
             pygame.draw.circle(self.SCREEN, self.BLUE, (x,y),size/2.5,0,1,1,1,1)
 
@@ -221,6 +224,11 @@ class UI:
             pygame.draw.circle(self.SCREEN, self.RED, (x,y),size/2.5,0,1,1,1,1)
             
         return obj
+    
+    def getClickedPortrait(self,mousePos):
+        for element in self.characterPortraits:
+            if element.isClicked(mousePos):
+                return element
 
     def drawSelectionBox(self, startx, starty, mousex, mousey):
         
@@ -351,10 +359,14 @@ class CharacterPortrait(UIElement):
     def __init__(self, SCREEN, character, x1, y1, type):
         super().__init__(SCREEN, character.getName(), x1,y1,self.PORTRAIT_WIDTH,self.PORTRAIT_HEIGHT)
         self.type = type
+        self.character = character
         if type == Object.TYPE_CHARACTER:
             self.color = UI.DARK_BLUE
         else:
             self.color = UI.DARK_RED
+            
+    def getCharacter(self):
+        return self.character
     
     def draw(self):
         self.__drawPortrait()        

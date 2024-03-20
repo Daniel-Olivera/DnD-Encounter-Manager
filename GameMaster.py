@@ -64,13 +64,15 @@ class GameMaster:
         self.items.remove(item)
         
     def placeCharacterOnBoard(self, character, x, y):
-        self.grid.addObjectToCell(x,y,character)
+        newCell = self.grid.findCell(x,y)
+        if newCell is not None and not newCell.hasObject():
+            self.grid.addObjectToCell(x,y,character)
     
     def placeItemOnBoard(self, item, x, y):
         self.grid.addObjectToCell(x,y,item)
         
-    def removeCharacterFromBoard(self, character, x, y):
-        self.grid.removeObjectFromCell(x,y,character)
+    def removeCharacterFromBoard(self, x, y):
+        self.grid.removeObjectFromCell(x,y)
         
     def removeItemFromBoard(self, item, x, y):
         self.grid.removeObjectFromCell(x,y,item)

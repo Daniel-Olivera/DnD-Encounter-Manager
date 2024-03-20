@@ -1,6 +1,7 @@
 import pygame
 from GameMaster import GameMaster
 from Modules.UI import UI
+from Modules.Cell import Cell
 
 WINDOW_HEIGHT = 720
 WINDOW_WIDTH = 1280
@@ -14,8 +15,8 @@ def main():
     gm = GameMaster(50, 50)
     gm.addPlayer("Nicole", "mage", 100)
     gm.addEnemy("Auntie", "archer", 100)
-    gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
-    gm.placeCharacterOnBoard(gm.getEnemies()[0], 2,3)
+    # gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
+    # gm.placeCharacterOnBoard(gm.getEnemies()[0], 2,3)
     running = True
     global SCREEN, CLOCK
     pygame.init()
@@ -60,7 +61,10 @@ def main():
                 # Handle Left Clicks
                 if event.button == LEFT_CLICK:
                     time_of_last_click = pygame.time.get_ticks()
-                    startDragCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
+                    if ui.clickedInGrid(event.pos):
+                        startDragCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
+                    else:
+                        startDragCell = ui.getClickedPortrait(event.pos)
                     leftMouseDragging = True
                     
                 # Handle Middle mouse clicks
@@ -84,10 +88,23 @@ def main():
                     
                 # When left mouse is released
                 if event.button == LEFT_CLICK:
+                    newCell = None
                     if heldItem is not None:
-                        newCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
-                        if newCell is not None:
+                        if ui.clickedInGrid(event.pos):
+                            newCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
+                        
+                        # Case when user drags from the portrait to the board
+                        # Put the character in the corresponding cell
+                        if not isinstance(startDragCell, Cell) and newCell is not None:
+                            gm.placeCharacterOnBoard(heldItem, newCell.getXCoord(), newCell.getYCoord())
+                        # Case when user drags character to new cell
+                        # Move the character to the new position
+                        elif isinstance(startDragCell, Cell) and newCell is not None:
                             gm.moveObjectOnBoard(heldItem, startDragCell.getXCoord(), startDragCell.getYCoord(), newCell.getXCoord(), newCell.getYCoord())
+                        # Case when user drags character off the board
+                        # Remove the character from the board
+                        elif isinstance(startDragCell, Cell) and newCell is None:
+                            gm.removeCharacterFromBoard(heldItem.getPos()[0], heldItem.getPos()[1])
                     leftMouseDragging = False
                     mousePos = pygame.mouse.get_pos()
                     
