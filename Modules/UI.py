@@ -157,6 +157,12 @@ class UI:
                 
             cellPos = "Cells: (" + str(min_x) + "," + str(min_y) + ") - (" + str(max_x) + "," + str(max_y) + ")" + "\n\nColors:  "
             
+        elif isinstance(cell, CharacterPortrait):
+            character = cell.getCharacter()
+            cellPos = "Position: (" + str(character.getPos()[0]) + ", " + str(character.getPos()[1]) + ")" + "  \n\n"
+            cellPos += character.getName() + "\nDesc:  " + character.getDescription() 
+            cellPos += "\nHP = " + str(character.getCurrentHP())
+            
         else:            
             cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  \n\n"
             if cell.hasObject():
@@ -164,10 +170,11 @@ class UI:
                 obj = cell.getItem()
                 cellPos += obj.getName() + "\nDesc:  " + obj.getDescription() 
                 if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
-                    cellPos += "\nHP = " + str(obj.getHP())
+                    cellPos += "\nHP = " + str(obj.getCurrentHP())
         
-        for element in self.colorPickingButtons:
-            element.draw()
+        if not isinstance(cell, CharacterPortrait):
+            for element in self.colorPickingButtons:
+                element.draw()
             
         cellPosText = self.infoFont.render(cellPos, True, self.WHITE, None)
         textRect = cellPosText.get_rect()
@@ -313,8 +320,11 @@ class UI:
                                                           (y*size) + self.offsety + y, 
                                                           size-self.BORDERSIZE, 
                                                           size-self.BORDERSIZE), 2)
-            
-            
+                    
+        
+# /////////////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////////////
+# /////////////////////////////////////////////////////////////////////////////////////
 # Building block for any ui element
 # Any element should be a subclass of this one
 class UIElement:

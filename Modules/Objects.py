@@ -83,6 +83,9 @@ class Character(Object):
     def giveItem(self, item):
         self.items.append(item)
         
+    def hasItems(self):
+        return len(self.items) != 0
+        
     def getInitiative(self):
         return self.initiative
     

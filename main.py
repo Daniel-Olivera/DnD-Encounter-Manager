@@ -15,6 +15,7 @@ def main():
     gm = GameMaster(50, 50)
     gm.addPlayer("Nicole", "mage", 100)
     gm.addEnemy("Auntie", "archer", 100)
+    gm.hurtCharacter(gm.getPlayers()[0],30)
     # gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
     # gm.placeCharacterOnBoard(gm.getEnemies()[0], 2,3)
     running = True
@@ -93,6 +94,10 @@ def main():
                         if ui.clickedInGrid(event.pos):
                             newCell = ui.getClickedCell(gm, event.pos, (offsetx, offsety))
                         
+                        # Case when the user just clicks on the portrait
+                        # Display character info on the right
+                        if not isinstance(startDragCell, Cell) and newCell is None:
+                            ui.displayText(startDragCell)
                         # Case when user drags from the portrait to the board
                         # Put the character in the corresponding cell
                         if not isinstance(startDragCell, Cell) and newCell is not None:
