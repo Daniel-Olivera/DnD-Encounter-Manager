@@ -34,6 +34,9 @@ def main():
     heldItem = None
     selection_box_start_pos_x = 0
     selection_box_start_pos_y = 0
+    keyBoardTextInput = "test"
+    print(keyBoardTextInput)
+    dmgTextActive = False
 
     ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)
     selectedCell = None
@@ -97,7 +100,7 @@ def main():
                         # Case when the user just clicks on the portrait
                         # Display character info on the right
                         if not isinstance(startDragCell, Cell) and newCell is None:
-                            ui.displayText(startDragCell)
+                            ui.displayText(startDragCell, keyBoardTextInput)
                         # Case when user drags from the portrait to the board
                         # Put the character in the corresponding cell
                         if not isinstance(startDragCell, Cell) and newCell is not None:
@@ -117,16 +120,18 @@ def main():
                         selectedCell = ui.getClickedCell(gm, mousePos, (offsetx, offsety))
                         if selectedCell is not None:
                             selectedCell.setColor(ui.DARK_GREY)
-                            ui.displayText(selectedCell)
+                            ui.displayText(selectedCell, keyBoardTextInput)
                     else:
                         newColor = ui.getClickedColor(mousePos)
                         ui.changeCellColor(newColor, selectedCell)
+                        if ui.dmgInputClicked(mousePos):
+                                dmgTextActive = True
                 
                 # When right mouse is released
                 if event.button == RIGHT_CLICK:
                     rightMouseDragging = False
                     selectedCell = ui.selectMultiple(selection_box_start_pos_x, selection_box_start_pos_y, mouse_x, mouse_y)
-                    ui.displayText(selectedCell)
+                    ui.displayText(selectedCell, keyBoardTextInput)
                         
             # What happens when the mouse moves
             if event.type == pygame.MOUSEMOTION:
@@ -136,23 +141,35 @@ def main():
             # What happens when you use the scroll wheel
             if event.type == pygame.MOUSEWHEEL:
                 ui.changeZoom(event)
+                
+            if dmgTextActive:
+                ui.displayText(selectedCell, keyBoardTextInput)
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                            print("pressed enter: ", keyBoardTextInput)
+                            keyBoardTextInput = ""
+                            dmgTextActive = False
+                    elif event.key == pygame.K_BACKSPACE:
+                        keyBoardTextInput = keyBoardTextInput[:-1]
+                    else:
+                        keyBoardTextInput += event.unicode
     
         # Handles when keyboard buttons are used
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
-            offsety -= 0.15 * gm.getGridSize()
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            offsetx -= 0.15 * gm.getGridSize()
-        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            offsety += 0.15 * gm.getGridSize()
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            offsetx += 0.15 * gm.getGridSize()
-        if keys[pygame.K_SPACE]:
-            offsetx = 0
-            offsety = 0
-        if keys[pygame.K_ESCAPE]:
-            selectedCell = None
-
+        if not dmgTextActive:
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_w] or keys[pygame.K_UP]:
+                offsety -= 0.15 * gm.getGridSize()
+            if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+                offsetx -= 0.15 * gm.getGridSize()
+            if keys[pygame.K_s] or keys[pygame.K_DOWN]:
+                offsety += 0.15 * gm.getGridSize()
+            if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                offsetx += 0.15 * gm.getGridSize()
+            if keys[pygame.K_SPACE]:
+                offsetx = 0
+                offsety = 0
+            if keys[pygame.K_ESCAPE]:
+                selectedCell = None
 
         pygame.display.update()
 

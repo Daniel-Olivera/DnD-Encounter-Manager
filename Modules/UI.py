@@ -41,6 +41,7 @@ class UI:
                          Button(self.SCREEN, None,1125,50,30,30,Button.BUTTON_TYPE_RECT,self.BLACK),
                          Button(self.SCREEN, None,1160,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_RED),
                          Button(self.SCREEN, None,1195,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_BLUE)]
+        self.dmgInput = TextInput(self.SCREEN, None, ((UI.WINDOW_WIDTH - 950)/4)+990, 180, 50, 35)
         self.characterPortraits = []
         portraitXCoord = 30
         for character in gm.getActiveParticipants():
@@ -129,9 +130,10 @@ class UI:
         if self.displayCellInfo:
             self.showCellInfo(self.cellToDisplay)
         
-    def displayText(self, cell):
+    def displayText(self, cell, damageInput):
         self.displayCellInfo = True
         self.cellToDisplay = cell
+        self.damageInput = damageInput
         
     def hideText(self):
         self.displayCellInfo = False
@@ -162,6 +164,7 @@ class UI:
             cellPos = "Position: (" + str(character.getPos()[0]) + ", " + str(character.getPos()[1]) + ")" + "  \n\n"
             cellPos += character.getName() + "\nDesc:  " + character.getDescription() 
             cellPos += "\nHP = " + str(character.getCurrentHP())
+            self.dmgInput.draw("")
             
         else:            
             cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  \n\n"
@@ -171,6 +174,7 @@ class UI:
                 cellPos += obj.getName() + "\nDesc:  " + obj.getDescription() 
                 if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
                     cellPos += "\nHP = " + str(obj.getCurrentHP())
+                    self.dmgInput.draw("")
         
         if not isinstance(cell, CharacterPortrait):
             for element in self.colorPickingButtons:
@@ -320,6 +324,9 @@ class UI:
                                                           (y*size) + self.offsety + y, 
                                                           size-self.BORDERSIZE, 
                                                           size-self.BORDERSIZE), 2)
+            
+    def dmgInputClicked(self, mousePos):
+        return self.dmgInput.isClicked(mousePos)
                     
         
 # /////////////////////////////////////////////////////////////////////////////////////
@@ -359,6 +366,29 @@ class Button(UIElement):
                 pygame.draw.rect(self.SCREEN, UI.DARK_BLUE, (x1,y1,x2,y2),2)
             else:
                 pygame.draw.rect(self.SCREEN, self.color, (x1,y1,x2,y2))
+                
+class TextInput(UIElement):
+    
+    def __init__(self, SCREEN, text, x1, y1, x2, y2):
+        super().__init__(SCREEN, text, x1, y1, x2, y2)
+        
+    def draw(self, input):
+        self.__drawTextInput(input)
+    
+    def __drawTextInput(self, dmgInputStr):
+        x1,y1,x2,y2 = self.boundingBox
+        pygame.draw.rect(self.SCREEN, UI.BLACK, (x1,y1-8,x2,y2))
+        pygame.draw.rect(self.SCREEN, UI.DARK_GREY, (x1+2,y1-6,x2-4,y2-4))
+        damageStr = "Damage:  "
+        dmgFont = pygame.font.Font('freesansbold.ttf', int(16.7))
+        dmgText = dmgFont.render(damageStr, True, UI.WHITE, None)
+        textRect = dmgText.get_rect()
+        textRect.topleft = (((UI.WINDOW_WIDTH - 950)/4)+900, y1)
+        dmgInputText = dmgFont.render(dmgInputStr, True, UI.WHITE, None)
+        dmgTextRect = dmgInputText.get_rect()
+        dmgTextRect.topleft = (((UI.WINDOW_WIDTH - 950)/4)+990, y1)
+        self.SCREEN.blit(dmgText, textRect)
+        self.SCREEN.blit(dmgInputText, dmgTextRect)
                 
 class CharacterPortrait(UIElement):
     
