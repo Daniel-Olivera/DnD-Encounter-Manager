@@ -58,11 +58,21 @@ class Character(Object):
     def __init__(self, objType, name, desc, hp):
         super().__init__(objType, name, desc)
         self.hp = hp
+        self.currentHP = hp
         self.items = []
         self.initiative = 0
         
-    def getHP(self):
+    def setHP(self, newHP):
+        self.currentHP = newHP
+        
+    def getMaxHP(self):
         return self.hp
+    
+    def getCurrentHP(self):
+        return self.currentHP
+    
+    def getHPPercent(self):
+        return self.currentHP/self.hp
     
     def getItems(self):
         return self.items

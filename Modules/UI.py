@@ -15,6 +15,7 @@ class UI:
     DARKER_GREY = (25,25,30)
     BLUE = (100,100,200)
     RED = (255,100,100)
+    GREEN = (100,255,100)
     DARK_RED = (255,50,50)
     WINDOW_HEIGHT = 720
     WINDOW_WIDTH = 1280
@@ -374,3 +375,13 @@ class CharacterPortrait(UIElement):
     def __drawPortrait(self):
         x1,y1,x2,y2 = self.boundingBox
         pygame.draw.rect(self.SCREEN, self.color, (x1,y1,x2,y2),2)
+        
+        # Draw the HP Bar
+        pygame.draw.rect(self.SCREEN, UI.RED, (x1+UI.BORDERSIZE,
+                                               y1+self.PORTRAIT_HEIGHT-5,
+                                               x2-UI.BORDERSIZE,
+                                               5))
+        pygame.draw.rect(self.SCREEN, UI.GREEN, (x1+UI.BORDERSIZE,
+                                                 y1+self.PORTRAIT_HEIGHT-5,
+                                                 int((x2-UI.BORDERSIZE)*self.character.getHPPercent()),
+                                                 5))

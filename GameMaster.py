@@ -51,6 +51,9 @@ class GameMaster:
         newEnemy = Character(Character.TYPE_ENEMY, name, desc, hp)
         self.enemies.append(newEnemy)
         
+    def hurtCharacter(self, character, damage):
+        character.setHP(character.getCurrentHP() - damage)
+        
     def addItem(self, name, desc):
         self.items.append(Item(name, desc))
         
