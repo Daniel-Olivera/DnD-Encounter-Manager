@@ -148,8 +148,10 @@ def main():
             if dmgTextActive:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                            print("pressed enter: ", keyBoardTextInput)
+                            if keyBoardTextInput.isnumeric():
+                                gm.hurtCharacter(selectedCell.getItem(), int(keyBoardTextInput))
                             keyBoardTextInput = ""
+                            ui.displayText(selectedCell, keyBoardTextInput)
                             dmgTextActive = False
                     elif event.key == pygame.K_BACKSPACE:
                         keyBoardTextInput = keyBoardTextInput[:-1]
