@@ -41,7 +41,11 @@ class UI:
                          Button(self.SCREEN, None,1125,50,30,30,Button.BUTTON_TYPE_RECT,self.BLACK),
                          Button(self.SCREEN, None,1160,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_RED),
                          Button(self.SCREEN, None,1195,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_BLUE)]
-        self.healthInput = TextInput(self.SCREEN, None, ((UI.WINDOW_WIDTH - 950)/4)+990, 180, 50, 35)
+        
+        self.hpChangeButtons = [
+                         Button(self.SCREEN, "hurt", ((UI.WINDOW_WIDTH - 950)/2)+900, 200, 20, 20, Button.BUTTON_TYPE_RECT, self.RED),
+                         Button(self.SCREEN, "heal", ((UI.WINDOW_WIDTH - 950)/2)+990, 200, 20, 20, Button.BUTTON_TYPE_RECT, self.GREEN)]
+        self.healthInput = TextInput(self.SCREEN, None, ((UI.WINDOW_WIDTH - 950)/2)+930, 200, 50, 35)
         self.characterPortraits = []
         portraitXCoord = 30
         for character in gm.getActiveParticipants():
@@ -164,7 +168,9 @@ class UI:
             cellPos = "Position: (" + str(character.getPos()[0]) + ", " + str(character.getPos()[1]) + ")" + "  \n\n"
             cellPos += character.getName() + "\nDesc:  " + character.getDescription() 
             cellPos += "\nHP = " + str(character.getCurrentHP())
-            self.healthInput.draw("")
+            self.healthInput.draw(self.numberInput)
+            for button in self.hpChangeButtons:
+                        button.draw()
             
         else:            
             cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  \n\n"
@@ -175,6 +181,8 @@ class UI:
                 if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
                     cellPos += "\nHP = " + str(obj.getCurrentHP())
                     self.healthInput.draw(self.numberInput)
+                    for button in self.hpChangeButtons:
+                        button.draw()
         
         if not isinstance(cell, CharacterPortrait):
             for element in self.colorPickingButtons:
@@ -189,6 +197,13 @@ class UI:
         for button in self.colorPickingButtons:
             if button.isClicked(mousePos):
                 return button.color
+    
+        return None
+    
+    def getClickedHPButton(self, mousePos):        
+        for button in self.hpChangeButtons:
+            if button.isClicked(mousePos):
+                return button.name
     
         return None
         
@@ -336,9 +351,11 @@ class UI:
 # Any element should be a subclass of this one
 class UIElement:
     
+    name = ""
+    
     def __init__(self, SCREEN, text, x1, y1, x2, y2):
         self.SCREEN = SCREEN
-        self.text = text
+        self.name = text
         self.boundingBox = (x1, y1, x2, y2)
         
     def isClicked(self, mousePos):
@@ -379,15 +396,10 @@ class TextInput(UIElement):
         x1,y1,x2,y2 = self.boundingBox
         pygame.draw.rect(self.SCREEN, UI.BLACK, (x1,y1-8,x2,y2))
         pygame.draw.rect(self.SCREEN, UI.DARK_GREY, (x1+2,y1-6,x2-4,y2-4))
-        damageStr = self.text
         txtFont = pygame.font.Font('freesansbold.ttf', int(16.7))
-        text = txtFont.render(damageStr, True, UI.WHITE, None)
-        textRect = text.get_rect()
-        textRect.topleft = (((UI.WINDOW_WIDTH - 950)/4)+900, y1)
         inputText = txtFont.render(inputStr, True, UI.WHITE, None)
         inputTextRect = inputText.get_rect()
         inputTextRect.topleft = (x1+8, y1)
-        self.SCREEN.blit(text, textRect)
         self.SCREEN.blit(inputText, inputTextRect)
 
 class CharacterPortrait(UIElement):

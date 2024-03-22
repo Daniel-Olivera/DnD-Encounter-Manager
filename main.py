@@ -15,9 +15,6 @@ def main():
     gm = GameMaster(50, 50)
     gm.addPlayer("Monga", "mage", 100)
     gm.addEnemy("Mongo", "archer", 100)
-    gm.hurtCharacter(gm.getPlayers()[0],30)
-    # gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
-    # gm.placeCharacterOnBoard(gm.getEnemies()[0], 2,3)
     running = True
     global SCREEN, CLOCK
     pygame.init()
@@ -103,6 +100,7 @@ def main():
                         # Display character info on the right
                         if not isinstance(startDragCell, Cell) and newCell is None:
                             ui.displayText(startDragCell, keyBoardTextInput)
+                            selectedCell = gm.getCell(startDragCell.getCharacter().getPos())
                         # Case when user drags from the portrait to the board
                         # Put the character in the corresponding cell
                         if not isinstance(startDragCell, Cell) and newCell is not None:
@@ -126,7 +124,7 @@ def main():
                     else:
                         newColor = ui.getClickedColor(mousePos)
                         ui.changeCellColor(newColor, selectedCell)
-                        if ui.dmgInputClicked(mousePos):
+                        if ui.healthInputClicked(mousePos):
                                 healthTextActive = True
                 
                 # When right mouse is released
@@ -144,15 +142,19 @@ def main():
             if event.type == pygame.MOUSEWHEEL:
                 ui.changeZoom(event)
                 
+            # When you click in the hp input box
             if healthTextActive:
+                buttonClicked = ui.getClickedHPButton(mousePos)
+                if buttonClicked == "heal":
+                    if keyBoardTextInput.isnumeric():
+                        gm.healCharacter(selectedCell.getItem(), int(keyBoardTextInput))
+                    keyBoardTextInput = ""
+                if buttonClicked == "hurt":
+                    if keyBoardTextInput.isnumeric():
+                        gm.hurtCharacter(selectedCell.getItem(), int(keyBoardTextInput))
+                    keyBoardTextInput = ""
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                            if keyBoardTextInput.isnumeric():
-                                gm.hurtCharacter(selectedCell.getItem(), int(keyBoardTextInput))
-                            keyBoardTextInput = ""
-                            ui.displayText(selectedCell, keyBoardTextInput)
-                            healthTextActive = False
-                    elif event.key == pygame.K_BACKSPACE:
+                    if event.key == pygame.K_BACKSPACE:
                         keyBoardTextInput = keyBoardTextInput[:-1]
                     else:
                         keyBoardTextInput += event.unicode

@@ -53,6 +53,13 @@ class GameMaster:
         
     def hurtCharacter(self, character, damage):
         character.setHP(character.getCurrentHP() - damage)
+        if character.getCurrentHP() < 0:
+            character.setHP(0)
+        
+    def healCharacter(self, character, healAmount):
+        character.setHP(character.getCurrentHP() + healAmount)
+        if character.getCurrentHP() > character.getMaxHP():
+            character.setHP(character.getMaxHP())
         
     def addItem(self, name, desc):
         self.items.append(Item(name, desc))
