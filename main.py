@@ -35,8 +35,7 @@ def main():
     selection_box_start_pos_x = 0
     selection_box_start_pos_y = 0
     keyBoardTextInput = ""
-    print(keyBoardTextInput)
-    dmgTextActive = False
+    healthTextActive = False
 
     ui = UI(SCREEN, gm, time_of_last_click=0, offsetx=0, offsety=0)
     selectedCell = None
@@ -46,7 +45,7 @@ def main():
         font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
         ui.draw(gm, time_of_last_click, offsetx, offsety, selectedCell)
         
-        if dmgTextActive:
+        if healthTextActive:
             ui.displayText(selectedCell, keyBoardTextInput)
         
         if selectedCell is None:
@@ -128,7 +127,7 @@ def main():
                         newColor = ui.getClickedColor(mousePos)
                         ui.changeCellColor(newColor, selectedCell)
                         if ui.dmgInputClicked(mousePos):
-                                dmgTextActive = True
+                                healthTextActive = True
                 
                 # When right mouse is released
                 if event.button == RIGHT_CLICK:
@@ -145,21 +144,21 @@ def main():
             if event.type == pygame.MOUSEWHEEL:
                 ui.changeZoom(event)
                 
-            if dmgTextActive:
+            if healthTextActive:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                             if keyBoardTextInput.isnumeric():
                                 gm.hurtCharacter(selectedCell.getItem(), int(keyBoardTextInput))
                             keyBoardTextInput = ""
                             ui.displayText(selectedCell, keyBoardTextInput)
-                            dmgTextActive = False
+                            healthTextActive = False
                     elif event.key == pygame.K_BACKSPACE:
                         keyBoardTextInput = keyBoardTextInput[:-1]
                     else:
                         keyBoardTextInput += event.unicode
     
         # Handles when keyboard buttons are used
-        if not dmgTextActive:
+        if not healthTextActive:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_w] or keys[pygame.K_UP]:
                 offsety -= 0.15 * gm.getGridSize()

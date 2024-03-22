@@ -41,7 +41,7 @@ class UI:
                          Button(self.SCREEN, None,1125,50,30,30,Button.BUTTON_TYPE_RECT,self.BLACK),
                          Button(self.SCREEN, None,1160,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_RED),
                          Button(self.SCREEN, None,1195,50,30,30,Button.BUTTON_TYPE_RECT,self.DARK_BLUE)]
-        self.dmgInput = TextInput(self.SCREEN, None, ((UI.WINDOW_WIDTH - 950)/4)+990, 180, 50, 35)
+        self.healthInput = TextInput(self.SCREEN, None, ((UI.WINDOW_WIDTH - 950)/4)+990, 180, 50, 35)
         self.characterPortraits = []
         portraitXCoord = 30
         for character in gm.getActiveParticipants():
@@ -130,10 +130,10 @@ class UI:
         if self.displayCellInfo:
             self.showCellInfo(self.cellToDisplay)
         
-    def displayText(self, cell, damageInput):
+    def displayText(self, cell, numberInput):
         self.displayCellInfo = True
         self.cellToDisplay = cell
-        self.damageInput = damageInput
+        self.numberInput = numberInput
         
     def hideText(self):
         self.displayCellInfo = False
@@ -164,7 +164,7 @@ class UI:
             cellPos = "Position: (" + str(character.getPos()[0]) + ", " + str(character.getPos()[1]) + ")" + "  \n\n"
             cellPos += character.getName() + "\nDesc:  " + character.getDescription() 
             cellPos += "\nHP = " + str(character.getCurrentHP())
-            self.dmgInput.draw("")
+            self.healthInput.draw("")
             
         else:            
             cellPos = "Cell: (" + str(cell.getXCoord()) + ", " + str(cell.getYCoord()) + ")" + "\n\nColors:  \n\n"
@@ -174,7 +174,7 @@ class UI:
                 cellPos += obj.getName() + "\nDesc:  " + obj.getDescription() 
                 if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
                     cellPos += "\nHP = " + str(obj.getCurrentHP())
-                    self.dmgInput.draw(self.damageInput)
+                    self.healthInput.draw(self.numberInput)
         
         if not isinstance(cell, CharacterPortrait):
             for element in self.colorPickingButtons:
@@ -325,8 +325,8 @@ class UI:
                                                           size-self.BORDERSIZE, 
                                                           size-self.BORDERSIZE), 2)
             
-    def dmgInputClicked(self, mousePos):
-        return self.dmgInput.isClicked(mousePos)
+    def healthInputClicked(self, mousePos):
+        return self.healthInput.isClicked(mousePos)
                     
         
 # /////////////////////////////////////////////////////////////////////////////////////
@@ -375,21 +375,21 @@ class TextInput(UIElement):
     def draw(self, input):
         self.__drawTextInput(input)
     
-    def __drawTextInput(self, dmgInputStr):
+    def __drawTextInput(self, inputStr):
         x1,y1,x2,y2 = self.boundingBox
         pygame.draw.rect(self.SCREEN, UI.BLACK, (x1,y1-8,x2,y2))
         pygame.draw.rect(self.SCREEN, UI.DARK_GREY, (x1+2,y1-6,x2-4,y2-4))
-        damageStr = "Damage:  "
-        dmgFont = pygame.font.Font('freesansbold.ttf', int(16.7))
-        dmgText = dmgFont.render(damageStr, True, UI.WHITE, None)
-        textRect = dmgText.get_rect()
+        damageStr = self.text
+        txtFont = pygame.font.Font('freesansbold.ttf', int(16.7))
+        text = txtFont.render(damageStr, True, UI.WHITE, None)
+        textRect = text.get_rect()
         textRect.topleft = (((UI.WINDOW_WIDTH - 950)/4)+900, y1)
-        dmgInputText = dmgFont.render(dmgInputStr, True, UI.WHITE, None)
-        dmgTextRect = dmgInputText.get_rect()
-        dmgTextRect.topleft = (x1+8, y1)
-        self.SCREEN.blit(dmgText, textRect)
-        self.SCREEN.blit(dmgInputText, dmgTextRect)
-                
+        inputText = txtFont.render(inputStr, True, UI.WHITE, None)
+        inputTextRect = inputText.get_rect()
+        inputTextRect.topleft = (x1+8, y1)
+        self.SCREEN.blit(text, textRect)
+        self.SCREEN.blit(inputText, inputTextRect)
+
 class CharacterPortrait(UIElement):
     
     TYPE_PLAYER = 0
