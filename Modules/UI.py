@@ -48,8 +48,9 @@ class UI:
         self.healthInput = TextInput(self.SCREEN, None, ((UI.WINDOW_WIDTH - 950)/2)+930, 200, 50, 35)
         self.characterPortraits = []
         portraitXCoord = 30
+        # TODO: add character image to portraits
         for character in gm.getActiveParticipants():
-            self.characterPortraits.append(CharacterPortrait(self.SCREEN, character,portraitXCoord,530,character.getType()))
+            self.characterPortraits.append(CharacterPortrait(self.SCREEN, character,portraitXCoord,530,character.getType()), None)
             portraitXCoord += CharacterPortrait.PORTRAIT_WIDTH + 10
 
             
@@ -409,10 +410,13 @@ class CharacterPortrait(UIElement):
     PORTRAIT_WIDTH = 120
     PORTRAIT_HEIGHT = 150
     
-    def __init__(self, SCREEN, character, x1, y1, type):
+    def __init__(self, SCREEN, character, x1, y1, type, file):
         super().__init__(SCREEN, character.getName(), x1,y1,self.PORTRAIT_WIDTH,self.PORTRAIT_HEIGHT)
         self.type = type
         self.character = character
+        if file is not None:
+            self.charImage = pygame.image.load(file)
+            self.imagerect = self.charImage.get_rect()
         if type == Object.TYPE_CHARACTER:
             self.color = UI.DARK_BLUE
         else:
@@ -426,6 +430,7 @@ class CharacterPortrait(UIElement):
         
     def __drawPortrait(self):
         x1,y1,x2,y2 = self.boundingBox
+        # Draw the box
         pygame.draw.rect(self.SCREEN, self.color, (x1,y1,x2,y2),2)
         
         # Draw the HP Bar
@@ -437,3 +442,15 @@ class CharacterPortrait(UIElement):
                                                  y1+self.PORTRAIT_HEIGHT-5,
                                                  int((x2-UI.BORDERSIZE)*self.character.getHPPercent()),
                                                  5))
+        
+        # Draw and write the nameplate
+        pygame.draw.rect(self.SCREEN, self.color, (x1+UI.BORDERSIZE,
+                                                   y1+2,
+                                                   x2-UI.BORDERSIZE,
+                                                   25))
+        
+        txtFont = pygame.font.Font('freesansbold.ttf', int(16.7))
+        inputText = txtFont.render(self.character.getName(), True, UI.WHITE, None)
+        inputTextRect = inputText.get_rect()
+        inputTextRect.topleft = (x1+(self.PORTRAIT_WIDTH/4), y1+5)
+        self.SCREEN.blit(inputText, inputTextRect)
