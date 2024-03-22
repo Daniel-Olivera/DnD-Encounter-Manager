@@ -174,7 +174,7 @@ class UI:
                 cellPos += obj.getName() + "\nDesc:  " + obj.getDescription() 
                 if obj.getType() == Object.TYPE_CHARACTER or obj.getType() == Object.TYPE_ENEMY:
                     cellPos += "\nHP = " + str(obj.getCurrentHP())
-                    self.dmgInput.draw("")
+                    self.dmgInput.draw(self.damageInput)
         
         if not isinstance(cell, CharacterPortrait):
             for element in self.colorPickingButtons:
@@ -386,7 +386,7 @@ class TextInput(UIElement):
         textRect.topleft = (((UI.WINDOW_WIDTH - 950)/4)+900, y1)
         dmgInputText = dmgFont.render(dmgInputStr, True, UI.WHITE, None)
         dmgTextRect = dmgInputText.get_rect()
-        dmgTextRect.topleft = (((UI.WINDOW_WIDTH - 950)/4)+990, y1)
+        dmgTextRect.topleft = (x1+8, y1)
         self.SCREEN.blit(dmgText, textRect)
         self.SCREEN.blit(dmgInputText, dmgTextRect)
                 

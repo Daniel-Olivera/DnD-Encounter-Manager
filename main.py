@@ -13,8 +13,8 @@ RIGHT_CLICK = 3
 def main():
     
     gm = GameMaster(50, 50)
-    gm.addPlayer("Nicole", "mage", 100)
-    gm.addEnemy("Auntie", "archer", 100)
+    gm.addPlayer("Monga", "mage", 100)
+    gm.addEnemy("Mongo", "archer", 100)
     gm.hurtCharacter(gm.getPlayers()[0],30)
     # gm.placeCharacterOnBoard(gm.getPlayers()[0], 1,1)
     # gm.placeCharacterOnBoard(gm.getEnemies()[0], 2,3)
@@ -34,7 +34,7 @@ def main():
     heldItem = None
     selection_box_start_pos_x = 0
     selection_box_start_pos_y = 0
-    keyBoardTextInput = "test"
+    keyBoardTextInput = ""
     print(keyBoardTextInput)
     dmgTextActive = False
 
@@ -45,6 +45,9 @@ def main():
     while running:
         font = pygame.font.Font('freesansbold.ttf', int(gm.getGridCellSize()/5))
         ui.draw(gm, time_of_last_click, offsetx, offsety, selectedCell)
+        
+        if dmgTextActive:
+            ui.displayText(selectedCell, keyBoardTextInput)
         
         if selectedCell is None:
             ui.hideText()
@@ -143,7 +146,6 @@ def main():
                 ui.changeZoom(event)
                 
             if dmgTextActive:
-                ui.displayText(selectedCell, keyBoardTextInput)
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
                             print("pressed enter: ", keyBoardTextInput)
