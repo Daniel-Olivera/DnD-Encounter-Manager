@@ -13,8 +13,8 @@ RIGHT_CLICK = 3
 def main():
     
     gm = GameMaster(50, 50)
-    gm.addPlayer("Monga", "mage", 100)
-    gm.addEnemy("Mongo", "archer", 100)
+    gm.addCharacter(gm.TYPE_CHARACTER, "Evan", "mage", 100, "placeholder.png")
+    gm.addCharacter(gm.TYPE_ENEMY, "Hunleff", "archer", 100, "placeholder2.png")
     running = True
     global SCREEN, CLOCK
     pygame.init()

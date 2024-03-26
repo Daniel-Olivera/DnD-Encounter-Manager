@@ -50,7 +50,7 @@ class UI:
         portraitXCoord = 30
         # TODO: add character image to portraits
         for character in gm.getActiveParticipants():
-            self.characterPortraits.append(CharacterPortrait(self.SCREEN, character,portraitXCoord,530,character.getType()), None)
+            self.characterPortraits.append(CharacterPortrait(self.SCREEN, character,portraitXCoord,530,character.getType(), character.getPortrait()))
             portraitXCoord += CharacterPortrait.PORTRAIT_WIDTH + 10
 
             
@@ -417,6 +417,7 @@ class CharacterPortrait(UIElement):
         if file is not None:
             self.charImage = pygame.image.load(file)
             self.imagerect = self.charImage.get_rect()
+            self.imagerect.topleft = (x1, y1)
         if type == Object.TYPE_CHARACTER:
             self.color = UI.DARK_BLUE
         else:
@@ -431,16 +432,17 @@ class CharacterPortrait(UIElement):
     def __drawPortrait(self):
         x1,y1,x2,y2 = self.boundingBox
         # Draw the box
+        self.SCREEN.blit(self.charImage, self.imagerect)
         pygame.draw.rect(self.SCREEN, self.color, (x1,y1,x2,y2),2)
         
         # Draw the HP Bar
         pygame.draw.rect(self.SCREEN, UI.RED, (x1+UI.BORDERSIZE,
                                                y1+self.PORTRAIT_HEIGHT-5,
-                                               x2-UI.BORDERSIZE,
+                                               x2-(UI.BORDERSIZE*2),
                                                5))
         pygame.draw.rect(self.SCREEN, UI.GREEN, (x1+UI.BORDERSIZE,
                                                  y1+self.PORTRAIT_HEIGHT-5,
-                                                 int((x2-UI.BORDERSIZE)*self.character.getHPPercent()),
+                                                 int((x2-(UI.BORDERSIZE*2))*self.character.getHPPercent()),
                                                  5))
         
         # Draw and write the nameplate

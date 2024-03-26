@@ -5,6 +5,9 @@ from Modules.Objects import Character
 # Manages the Game. Used to manipulate the gameboard and move characters and items around
 class GameMaster:
     
+    TYPE_ENEMY = 1
+    TYPE_CHARACTER = 2
+    
     def __init__(self, gridSize, cellSize):
         self.grid = Grid(gridSize, cellSize)
         self.players = []
@@ -42,13 +45,19 @@ class GameMaster:
         activeParticipants = self.players + self.enemies
         activeParticipants.sort(key = lambda x: x.getInitiative(), reverse=True)
         return activeParticipants
+    
+    def addCharacter(self, type, name, desc, hp, file):
+        if type == Character.TYPE_CHARACTER:
+            self.addPlayer(name, desc, hp, file)
+        if type == Character.TYPE_ENEMY:
+            self.addEnemy(name, desc, hp, file)
         
-    def addPlayer(self, name, desc, hp):
-        newPlayer = Character(Character.TYPE_CHARACTER, name, desc, hp)
+    def addPlayer(self, name, desc, hp, file):
+        newPlayer = Character(Character.TYPE_CHARACTER, name, desc, hp, file)
         self.players.append(newPlayer)
         
-    def addEnemy(self, name, desc, hp):
-        newEnemy = Character(Character.TYPE_ENEMY, name, desc, hp)
+    def addEnemy(self, name, desc, hp, file):
+        newEnemy = Character(Character.TYPE_ENEMY, name, desc, hp, file)
         self.enemies.append(newEnemy)
         
     def hurtCharacter(self, character, damage):

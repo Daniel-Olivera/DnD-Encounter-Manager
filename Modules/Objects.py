@@ -55,12 +55,13 @@ class Item(Object):
 # Character items are a list because a character may have many duplicates of an item such as 2 daggers.
 class Character(Object):
 
-    def __init__(self, objType, name, desc, hp):
+    def __init__(self, objType, name, desc, hp, file):
         super().__init__(objType, name, desc)
         self.hp = hp
         self.currentHP = hp
         self.items = []
         self.initiative = 0
+        self.image = file
         
     def setHP(self, newHP):
         self.currentHP = newHP
@@ -91,6 +92,10 @@ class Character(Object):
     
     def setInitiative(self, initiative):
         self.initiative = initiative
+
+    def getPortrait(self):
+        return self.image
+    
         
     def __str__(self):
         return "Name: {0}\nDescription: {1}\nHP: {2}\nItems: ".format(self.getName(), self.getDescription(), self.getHP())
