@@ -24,7 +24,8 @@ class GameMaster:
             data[key] = character.toJson()
         
         for i, cell in enumerate(self.grid.getCells()):
-            data[str(cell.getPos())] = cell.toJson()
+            if cell.getColor() != (25,25,30) or cell.hasObject():
+                data[str(cell.getPos())] = cell.toJson()
         
         js.saveGame(data)
         
