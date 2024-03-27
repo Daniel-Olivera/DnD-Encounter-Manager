@@ -1,34 +1,34 @@
 {
     "Character 0": {
+        "Name": "Hunleff",
+        "Description": "archer",
+        "type": 1,
+        "HP": 100,
+        "MaxHP": 100,
+        "Initiative": 15,
+        "Position": [
+            4,
+            4
+        ],
+        "image file": "placeholder2.png"
+    },
+    "Character 1": {
         "Name": "Evan",
         "Description": "mage",
         "type": 2,
         "HP": 100,
         "MaxHP": 100,
-        "Initiative": 18,
+        "Initiative": 11,
         "Position": [
             1,
             1
         ],
         "image file": "placeholder.png"
     },
-    "Character 1": {
-        "Name": "Hunleff",
-        "Description": "archer",
-        "type": 1,
-        "HP": 70,
-        "MaxHP": 100,
-        "Initiative": 15,
-        "Position": [
-            5,
-            3
-        ],
-        "image file": "placeholder2.png"
-    },
     "(0, 0)": {
-        "color_r": 255,
-        "color_g": 50,
-        "color_b": 50,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(0, 1)": {
@@ -341,7 +341,7 @@
             "type": 2,
             "HP": 100,
             "MaxHP": 100,
-            "Initiative": 18,
+            "Initiative": 11,
             "Position": [
                 1,
                 1
@@ -1265,7 +1265,19 @@
         "color_r": 25,
         "color_g": 25,
         "color_b": 30,
-        "object": null
+        "object": {
+            "Name": "Hunleff",
+            "Description": "archer",
+            "type": 1,
+            "HP": 100,
+            "MaxHP": 100,
+            "Initiative": 15,
+            "Position": [
+                4,
+                4
+            ],
+            "image file": "placeholder2.png"
+        }
     },
     "(4, 5)": {
         "color_r": 25,
@@ -1559,19 +1571,7 @@
         "color_r": 25,
         "color_g": 25,
         "color_b": 30,
-        "object": {
-            "Name": "Hunleff",
-            "Description": "archer",
-            "type": 1,
-            "HP": 70,
-            "MaxHP": 100,
-            "Initiative": 15,
-            "Position": [
-                5,
-                3
-            ],
-            "image file": "placeholder2.png"
-        }
+        "object": null
     },
     "(5, 4)": {
         "color_r": 25,
@@ -2456,21 +2456,21 @@
         "object": null
     },
     "(8, 1)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(8, 2)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(8, 3)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(8, 4)": {
@@ -2756,21 +2756,21 @@
         "object": null
     },
     "(9, 1)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(9, 2)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(9, 3)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(9, 4)": {
@@ -3056,21 +3056,21 @@
         "object": null
     },
     "(10, 1)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(10, 2)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(10, 3)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(10, 4)": {
@@ -3356,21 +3356,21 @@
         "object": null
     },
     "(11, 1)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(11, 2)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(11, 3)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(11, 4)": {
@@ -3656,21 +3656,21 @@
         "object": null
     },
     "(12, 1)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(12, 2)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(12, 3)": {
-        "color_r": 75,
-        "color_g": 75,
-        "color_b": 255,
+        "color_r": 25,
+        "color_g": 25,
+        "color_b": 30,
         "object": null
     },
     "(12, 4)": {
