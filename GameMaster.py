@@ -7,6 +7,7 @@ from ast import literal_eval as make_tuple
 # Manages the Game. Used to manipulate the gameboard and move characters and items around
 class GameMaster:
     
+    DEFAULT_COLOR = (25,25,30)
     TYPE_ENEMY = 1
     TYPE_CHARACTER = 2
     
@@ -24,7 +25,7 @@ class GameMaster:
             data[key] = character.toJson()
         
         for i, cell in enumerate(self.grid.getCells()):
-            if cell.getColor() != (25,25,30) or cell.hasObject():
+            if cell.getColor() != self.DEFAULT_COLOR or cell.hasObject():
                 data[str(cell.getPos())] = cell.toJson()
         
         js.saveGame(data)
