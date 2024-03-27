@@ -38,7 +38,6 @@ class GameMaster:
         for item in data:
             thing = data[item]
             if "Character" in item:
-                print("there's a character")
                 newCharacter = self.addCharacter(thing["type"], thing["Name"], thing["Description"],
                                     thing["MaxHP"], thing["HP"], thing["Initiative"], thing["Position"], thing["image file"])
                 self.placeCharacterOnBoard(newCharacter, thing["Position"][0], thing["Position"][1])
