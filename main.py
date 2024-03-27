@@ -13,8 +13,10 @@ RIGHT_CLICK = 3
 def main():
     
     gm = GameMaster(50, 50)
-    gm.addCharacter(gm.TYPE_CHARACTER, "Evan", "mage", 100, "placeholder.png")
-    gm.addCharacter(gm.TYPE_ENEMY, "Hunleff", "archer", 100, "placeholder2.png")
+    # gm.addCharacter(gm.TYPE_CHARACTER, "Evan", "mage", 100, "placeholder.png")
+    # gm.addCharacter(gm.TYPE_ENEMY, "Hunleff", "archer", 100, "placeholder2.png")
+    # gm.saveGame()
+    gm.loadGame()
     running = True
     global SCREEN, CLOCK
     pygame.init()
@@ -59,6 +61,7 @@ def main():
             # Closes pygame
             if event.type == pygame.QUIT:
                 running = False
+                gm.saveGame()
                 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Handle Left Clicks

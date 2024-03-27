@@ -1,6 +1,7 @@
 from Modules.Grid import Grid
 from Modules.Objects import Item
 from Modules.Objects import Character
+from Modules.json import jsonReader
 
 # Manages the Game. Used to manipulate the gameboard and move characters and items around
 class GameMaster:
@@ -13,6 +14,24 @@ class GameMaster:
         self.players = []
         self.enemies = []
         self.items = []
+        
+    def saveGame(self):
+        js = jsonReader()
+        data = {}
+        for i, character in enumerate(self.getActiveParticipants()):
+            data[i] = character.toJson()
+        js.saveGame(data)
+        
+    def loadGame(self):
+        js = jsonReader()
+        data = js.loadGame()
+        if data is None:
+            return
+        
+        for item in data:
+            thing = data[item]
+            self.addCharacter(thing["type"], thing["Name"], thing["Description"],
+                              thing["MaxHP"], thing["HP"], thing["Initiative"], thing["image file"])
         
     def getGrid(self):
         return self.grid
@@ -46,18 +65,18 @@ class GameMaster:
         activeParticipants.sort(key = lambda x: x.getInitiative(), reverse=True)
         return activeParticipants
     
-    def addCharacter(self, type, name, desc, hp, file):
+    def addCharacter(self, type, name, desc, hp, currentHP, initiative, file):
         if type == Character.TYPE_CHARACTER:
-            self.addPlayer(name, desc, hp, file)
+            self.addPlayer(name, desc, hp, currentHP, initiative, file)
         if type == Character.TYPE_ENEMY:
-            self.addEnemy(name, desc, hp, file)
+            self.addEnemy(name, desc, hp, currentHP, initiative, file)
         
-    def addPlayer(self, name, desc, hp, file):
-        newPlayer = Character(Character.TYPE_CHARACTER, name, desc, hp, file)
+    def addPlayer(self, name, desc, hp, currentHP, initiative, file):
+        newPlayer = Character(Character.TYPE_CHARACTER, name, desc, hp, currentHP, initiative, file)
         self.players.append(newPlayer)
         
-    def addEnemy(self, name, desc, hp, file):
-        newEnemy = Character(Character.TYPE_ENEMY, name, desc, hp, file)
+    def addEnemy(self, name, desc, hp, currentHP, initiative, file):
+        newEnemy = Character(Character.TYPE_ENEMY, name, desc, hp, currentHP, initiative, file)
         self.enemies.append(newEnemy)
         
     def hurtCharacter(self, character, damage):

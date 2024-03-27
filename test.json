@@ -1,0 +1,20 @@
+{
+    "0": {
+        "Name": "Evan",
+        "Description": "mage",
+        "type": 2,
+        "HP": 100,
+        "MaxHP": 100,
+        "Initiative": 0,
+        "image file": "placeholder.png"
+    },
+    "1": {
+        "Name": "Hunleff",
+        "Description": "archer",
+        "type": 1,
+        "HP": 70,
+        "MaxHP": 100,
+        "Initiative": 0,
+        "image file": "placeholder2.png"
+    }
+}
