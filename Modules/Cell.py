@@ -26,6 +26,9 @@ class Cell:
     def getYCoord(self):
         return self.y
     
+    def getPos(self):
+        return (self.x, self.y)
+    
     def getSize(self):
         return self.size
     
@@ -54,3 +57,15 @@ class Cell:
     def hasObject(self):
         return self.cellObject != None
     
+    def toJson(self):
+        if self.cellObject is None:
+            data = {"color_r" : self.permanentColor_r, "color_g" : self.permanentColor_g,
+                    "color_b" : self.permanentColor_b, "object" : self.cellObject}
+        else:
+            data = {"color_r" : self.permanentColor_r, "color_g" : self.permanentColor_g,
+                    "color_b" : self.permanentColor_b, "object" : self.cellObject.toJson()}
+        return data
+        
+        
+        
+        

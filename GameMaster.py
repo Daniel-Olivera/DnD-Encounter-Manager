@@ -2,6 +2,7 @@ from Modules.Grid import Grid
 from Modules.Objects import Item
 from Modules.Objects import Character
 from Modules.json import jsonReader
+from ast import literal_eval as make_tuple
 
 # Manages the Game. Used to manipulate the gameboard and move characters and items around
 class GameMaster:
@@ -19,8 +20,14 @@ class GameMaster:
         js = jsonReader()
         data = {}
         for i, character in enumerate(self.getActiveParticipants()):
-            data[i] = character.toJson()
+            key = "Character " + str(i)
+            data[key] = character.toJson()
+        
+        for i, cell in enumerate(self.grid.getCells()):
+            data[str(cell.getPos())] = cell.toJson()
+        
         js.saveGame(data)
+        
         
     def loadGame(self):
         js = jsonReader()
@@ -30,8 +37,14 @@ class GameMaster:
         
         for item in data:
             thing = data[item]
-            self.addCharacter(thing["type"], thing["Name"], thing["Description"],
-                              thing["MaxHP"], thing["HP"], thing["Initiative"], thing["image file"])
+            if "Character" in item:
+                newCharacter = self.addCharacter(thing["type"], thing["Name"], thing["Description"],
+                                    thing["MaxHP"], thing["HP"], thing["Initiative"], thing["Position"], thing["image file"])
+                self.placeCharacterOnBoard(newCharacter, thing["Position"][0], thing["Position"][1])
+            else:
+                coords = make_tuple(item)
+                self.setCellColor(self.grid.findCell(coords[0], coords[1]), (thing["color_r"], thing["color_g"], thing["color_b"]))
+            
         
     def getGrid(self):
         return self.grid
@@ -65,19 +78,23 @@ class GameMaster:
         activeParticipants.sort(key = lambda x: x.getInitiative(), reverse=True)
         return activeParticipants
     
-    def addCharacter(self, type, name, desc, hp, currentHP, initiative, file):
+    def addCharacter(self, type, name, desc, hp, currentHP, initiative, pos, file):
+        newCharacter = None
         if type == Character.TYPE_CHARACTER:
-            self.addPlayer(name, desc, hp, currentHP, initiative, file)
+            newCharacter = self.addPlayer(name, desc, hp, currentHP, initiative, pos, file)
         if type == Character.TYPE_ENEMY:
-            self.addEnemy(name, desc, hp, currentHP, initiative, file)
+            newCharacter = self.addEnemy(name, desc, hp, currentHP, initiative, pos, file)
+        return newCharacter
         
-    def addPlayer(self, name, desc, hp, currentHP, initiative, file):
-        newPlayer = Character(Character.TYPE_CHARACTER, name, desc, hp, currentHP, initiative, file)
+    def addPlayer(self, name, desc, hp, currentHP, initiative, pos, file):
+        newPlayer = Character(Character.TYPE_CHARACTER, name, desc, hp, currentHP, initiative, pos, file)
         self.players.append(newPlayer)
+        return newPlayer
         
-    def addEnemy(self, name, desc, hp, currentHP, initiative, file):
-        newEnemy = Character(Character.TYPE_ENEMY, name, desc, hp, currentHP, initiative, file)
+    def addEnemy(self, name, desc, hp, currentHP, initiative, pos, file):
+        newEnemy = Character(Character.TYPE_ENEMY, name, desc, hp, currentHP, initiative, pos, file)
         self.enemies.append(newEnemy)
+        return newEnemy
         
     def hurtCharacter(self, character, damage):
         character.setHP(character.getCurrentHP() - damage)

@@ -55,12 +55,13 @@ class Item(Object):
 # Character items are a list because a character may have many duplicates of an item such as 2 daggers.
 class Character(Object):
 
-    def __init__(self, objType, name, desc, hp, currentHP, initiative, file):
+    def __init__(self, objType, name, desc, hp, currentHP, initiative, pos, file):
         super().__init__(objType, name, desc)
         self.hp = hp
         self.currentHP = currentHP
         self.items = []
         self.initiative = initiative
+        self.setPos(pos[0], pos[1])
         self.image = file
         
     def setHP(self, newHP):
@@ -98,7 +99,7 @@ class Character(Object):
     
     def toJson(self):
         return {"Name" : self.name, "Description" : self.description, "type" : self.objType, "HP" : self.currentHP,
-                "MaxHP" : self.hp, "Initiative" : self.initiative, "image file" : self.image}
+                "MaxHP" : self.hp, "Initiative" : self.initiative, "Position" : self.getPos(), "image file" : self.image}
     
     def __str__(self):
         return "Name: {0}\nDescription: {1}\nHP: {2}\nItems: ".format(self.getName(), self.getDescription(), self.getHP())
